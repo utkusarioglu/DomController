@@ -1,0 +1,28 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "moduleResolution": "node",
+    //"composite": true, /* Enable project compilation */
+    "rootDir": "src",
+    "outDir": "lib",
+    //"incremental": true,
+    //"outFile": "./index.js",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "noEmitOnError": false,
+    "removeComments": true,
+    "target": "es6",
+    "strict": true,
+    "lib": [ "es2017", "dom" ],
+    "sourceMap": true, /* Generates corresponding '.map' file. */
+    "declaration": true, /* Generates corresponding '.d.ts' file. */
+    "declarationMap": false /* Generates a sourcemap for each corresponding '.d.ts' file. */
+  },
+  "include": [
+    "src/index.ts",
+    "src/**/*.test.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
