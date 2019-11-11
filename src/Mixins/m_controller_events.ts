@@ -95,7 +95,6 @@ export abstract class M_ControllerEvents {
     private _services!: Array<t_service>;
 
 
-
 /*
  * ======================================================= Boundary 1 =========
  *
@@ -220,7 +219,6 @@ export abstract class M_ControllerEvents {
     }
 
 
-
 /*
  * ======================================================= Boundary 1 =========
  *
@@ -244,44 +242,55 @@ export abstract class M_ControllerEvents {
      * Class: M_ControllerEvents
      * Service: Controller
      */
-    public initialize_Controller(): this {
+    public initialize_Controller(sequential_startup: boolean = true): this {
 
         this.set_Controller();
 
+        if (sequential_startup) {
 
-        // Listens
-        this.get_Controller()
-            .wait(
-                e_Scope.Global,
-                C_Controller.AllServices,
-                C_StartupTalk.run_Listen,
-                undefined,
-                () => {
+            // Listens
+            this.get_Controller()
+                .wait(
+                    e_Scope.Global,
+                    C_Controller.AllServices,
+                    C_StartupTalk.run_Listen,
+                    undefined,
+                    () => {
 
-                    this.register_Dependencies();
-                    this.register_Subscriptions();
+                        this.register_Dependencies();
+                        this.register_Subscriptions();
 
-                    this.announce_ToAllServices(C_BootState.ListenReady);
-                },
-            );
+                        this.announce_ToAllServices(C_BootState.ListenReady);
+                    },
+                );
 
-        // Talks
-        this.get_Controller()
-            .wait(
-                e_Scope.Global,
-                C_Controller.AllServices,
-                C_StartupTalk.run_Talk,
-                undefined,
-                () => {
+            // Talks
+            this.get_Controller()
+                .wait(
+                    e_Scope.Global,
+                    C_Controller.AllServices,
+                    C_StartupTalk.run_Talk,
+                    undefined,
+                    () => {
 
-                    this.register_Announcements();
-                    this.register_Services();
+                        this.register_Announcements();
+                        this.register_Services();
 
-                    this.announce_ToAllServices(C_BootState.TalkReady);
-                },
-            );
+                        this.announce_ToAllServices(C_BootState.TalkReady);
+                    },
+                );
 
-        this.announce_ToAllServices(C_BootState.ClassReady, 200)
+            this.announce_ToAllServices(C_BootState.ClassReady, 200)
+
+        } else {
+
+            this.register_Dependencies();
+            this.register_Subscriptions();
+            this.register_Announcements();
+            this.register_Services();
+
+        }
+
 
         return this;
     }

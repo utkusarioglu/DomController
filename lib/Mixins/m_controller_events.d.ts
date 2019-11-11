@@ -17,7 +17,7 @@ export declare abstract class M_ControllerEvents {
     include_Dependencies(dependencies_list: t_dependency_group[]): this;
     include_Receptions(reception_list: t_reception[]): this;
     include_Services(services_list: t_service[]): this;
-    initialize_Controller(): this;
+    initialize_Controller(sequential_startup?: boolean): this;
     private register_Subscriptions;
     private register_Dependencies;
     private register_Announcements;

@@ -1,6 +1,6 @@
 {
   "name": "@utkusarioglu/dom-controller",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "author": {
@@ -12,7 +12,8 @@
     "clean": "shx rm -rf _bundles lib lib-esm index.d.ts package-lock.json",
     "declaration": "dts-bundle --name @utkusarioglu/dom-controller --main lib/index.d.ts --out ../index.d.ts",
     "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && webpack && npm run declaration",
-    "test": "jest"
+    "test": "jest",
+    "test-": "npm run build & jest"
   },
   "devDependencies": {
     "@types/jest": "24.0.21",
