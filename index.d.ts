@@ -14,9 +14,10 @@ declare module '@utkusarioglu/dom-controller' {
 }
 
 declare module '@utkusarioglu/dom-controller/Controller/controller' {
+    import { t_ri0 } from "@utkusarioglu/resolver";
     import { SeparatorHandler } from "@utkusarioglu/dom-controller/Common/separator_handler";
     import { t_resolutionInstruction, t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
-    import { t_scope, t_singleScope, t_waitSet, t_transmission, e_ServiceGroup, t_staticContentArchive, t_localControllerStack, t_epoch } from "@utkusarioglu/dom-controller/Common/t_controller";
+    import { t_scope, t_singleScope, t_waitSet, t_transmission, e_ServiceGroup, t_staticContentArchive, t_localControllerStack, t_epoch, t_talk } from "@utkusarioglu/dom-controller/Common/t_controller";
     import { t_namespace } from "@utkusarioglu/namespace";
     export class Controller extends SeparatorHandler {
         constructor(namespace: t_namespace);
@@ -30,7 +31,7 @@ declare module '@utkusarioglu/dom-controller/Controller/controller' {
         static force_AllDynamicService(): void;
         announce(scope: t_scope, recipient_namespace: t_namespace, talk: t_resolutionInstruction, delay?: boolean | t_epoch): void;
         get_AnnouncementArchive(scope: t_singleScope): object[];
-        subscribe(scope: t_scope, subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: t_transmission) => void): void;
+        subscribe(scope: t_scope, subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: t_talk<t_ri0>) => void): void;
         wait(scope: t_singleScope, recipient_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, test_callback?: (transmission: t_transmission) => boolean, action_callback?: (transmission: t_transmission) => void, count?: number, current_count?: number): Promise<any>;
         wait_Some(scope: t_singleScope, wait_set: t_waitSet[]): Promise<any>;
         set_LocalNamespace(local_namespace: t_namespace): this;
@@ -112,7 +113,7 @@ declare module '@utkusarioglu/dom-controller/Common/t_controller' {
     export interface t_transmission {
         Sender: t_namespace;
         Recipient: t_namespace;
-        Channel?: t_channel;
+        Channel: t_channel;
         Group?: e_ServiceGroup;
         Listen?: t_resolutionInstructionNoArgs;
         Talk?: t_resolutionInstruction;
@@ -200,8 +201,9 @@ declare module '@utkusarioglu/dom-controller/Common/separator_handler' {
 }
 
 declare module '@utkusarioglu/dom-controller/BaseController/base_controller' {
+    import { t_ri0 } from "@utkusarioglu/resolver";
     import { SeparatorHandler } from "@utkusarioglu/dom-controller/Common/separator_handler";
-    import { t_waitSet, t_transmission, e_ServiceGroup, e_Scope, t_singleScope, t_epoch } from "@utkusarioglu/dom-controller/Common/t_controller";
+    import { t_waitSet, t_transmission, e_ServiceGroup, e_Scope, t_singleScope, t_epoch, t_talk } from "@utkusarioglu/dom-controller/Common/t_controller";
     import { t_resolutionInstruction, t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
     import { t_namespace } from "@utkusarioglu/namespace";
     export class BaseController extends SeparatorHandler {
@@ -212,7 +214,7 @@ declare module '@utkusarioglu/dom-controller/BaseController/base_controller' {
         publicget_ServedChannels(): string[];
         announce(scope: t_singleScope, sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_resolutionInstruction, delay?: boolean | t_epoch): void;
         get_AnnouncementArchive(): object[];
-        subscribe(scope: t_singleScope, subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: t_transmission) => void): void;
+        subscribe(scope: t_singleScope, subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: t_talk<t_ri0>) => void): void;
         wait(scope: t_singleScope, waiter_namespace: t_namespace, recipient_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, test_callback?: (transmission: t_transmission) => boolean, action_callback?: (transmission: t_transmission) => any, total_count?: number, current_count?: number): Promise<any>;
         wait_Some(scope: t_singleScope, waiter_namespace: t_namespace, wait_set: t_waitSet[]): Promise<t_transmission[]>;
     }

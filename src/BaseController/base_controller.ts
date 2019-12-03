@@ -3,7 +3,7 @@
  *	COMMON CLASSES
  */ 
 import { EventEmitter } from "@utkusarioglu/event-emitter";
-import { Resolution } from "@utkusarioglu/resolver";
+import { Resolution, t_ri0 } from "@utkusarioglu/resolver";
 import { SeparatorHandler } from "../Common/separator_handler";
 /*
  *	CONSTANTS
@@ -22,6 +22,7 @@ import {
     t_singleScope,
     t_channel,
     t_epoch,
+    t_talk,
 } from "../Common/t_controller";
 import {
     t_resolutionInstruction,
@@ -236,6 +237,7 @@ export class BaseController extends SeparatorHandler {
                             Sender: transmission.Recipient,
                             Recipient: transmission.Sender,
                             Talk: transmission.Talk,
+                            Channel: transmission.Channel,
                             Content: requested_return_content,
                             Time: (new Date()).getTime(),
                             Static: false,
@@ -474,7 +476,7 @@ export class BaseController extends SeparatorHandler {
         scope: t_singleScope,
         subcribed_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
-        callback: (transmission: t_transmission) => void,
+        callback: (transmission: t_talk<t_ri0>) => void,
     ): void {
 
         const expression_trail: t_expressionTrail =

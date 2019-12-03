@@ -23,7 +23,7 @@ export declare type t_transmissionContent = any;
 export interface t_transmission {
     Sender: t_namespace;
     Recipient: t_namespace;
-    Channel?: t_channel;
+    Channel: t_channel;
     Group?: e_ServiceGroup;
     Listen?: t_resolutionInstructionNoArgs;
     Talk?: t_resolutionInstruction;

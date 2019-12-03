@@ -49,6 +49,7 @@ export class BaseController extends SeparatorHandler {
                     Sender: transmission.Recipient,
                     Recipient: transmission.Sender,
                     Talk: transmission.Talk,
+                    Channel: transmission.Channel,
                     Content: requested_return_content,
                     Time: (new Date()).getTime(),
                     Static: false,

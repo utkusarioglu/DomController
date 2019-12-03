@@ -116,7 +116,7 @@ export interface t_transmission {
      * 4- id separator (if applies)
      * 5- id (if applies)
      */
-    Channel?: t_channel;
+    Channel: t_channel;
     /** denotes the service group in service transmissions */
     Group?: e_ServiceGroup;
     /** Listening resolution involved with the transmission */

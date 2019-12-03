@@ -8,7 +8,7 @@
 /*
  *	DEPENDENCIES
  */
-import { Resolution } from "@utkusarioglu/resolver";
+import { Resolution, t_ri0 } from "@utkusarioglu/resolver";
 
 /*
  *	LOCAL CLASSES
@@ -40,6 +40,7 @@ import {
     t_localControllerStack,
     t_channel,
     t_epoch,
+    t_talk,
 } from "../Common/t_controller";
 import { i_map } from "@utkusarioglu/state/t_state"; // This should be removed
 import { t_namespace } from "@utkusarioglu/namespace";
@@ -533,7 +534,7 @@ export class Controller extends SeparatorHandler {
         scope: t_scope,
         subcribed_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
-        callback: (transmission: t_transmission) => void,
+        callback: (transmission: t_talk<t_ri0>) => void,
     ): void {
 
         this.get_Scopes(scope).forEach((active_scope: BaseController) => {
