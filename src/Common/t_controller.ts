@@ -9,6 +9,7 @@ import { BaseController } from "../BaseController/base_controller";
 import {
     t_resolutionInstructionNoArgs,
     t_resolutionInstruction,
+    t_ri1,
 } from "@utkusarioglu/resolver";
 
 import { t_namespace } from "@utkusarioglu/namespace";
@@ -256,3 +257,30 @@ export interface t_sequenceStep {
  * Generic mapping object for Controller
  */
 export interface i_map<T> { [key: string]: T; }
+
+
+/**
+ * Sub set of t_transmission for talk event
+ */
+export interface t_talk<T> {
+    /** namespace of the sender*/
+    Sender: t_namespace;
+    /** namespace of the recipient*/
+    Recipient: t_namespace;
+    /** Redundant info for ease of access, concatenating:
+     * 1- recipient namespace  
+     * 2- method or announcement separator (whichever applies)
+     * 3- service group
+     * 4- id separator (if applies)
+     * 5- id (if applies)
+     */
+    Channel: t_channel;
+    /** Talking that is involved with the transmission*/
+    Talk: T;
+    /** Error content if an error occured*/
+    Error?: t_error;
+    /** epoch when the transmission occured */
+    Time: t_epoch;
+    Static: boolean;
+    Scope: e_Scope;
+}

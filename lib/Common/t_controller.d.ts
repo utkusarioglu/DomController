@@ -87,3 +87,13 @@ export interface t_sequenceStep {
 export interface i_map<T> {
     [key: string]: T;
 }
+export interface t_talk<T> {
+    Sender: t_namespace;
+    Recipient: t_namespace;
+    Channel: t_channel;
+    Talk: T;
+    Error?: t_error;
+    Time: t_epoch;
+    Static: boolean;
+    Scope: e_Scope;
+}
