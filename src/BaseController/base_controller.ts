@@ -240,6 +240,7 @@ export class BaseController extends SeparatorHandler {
                             Talk: transmission.Talk,
                             Group: group,
                             Channel: transmission.Channel,
+                            Id: transmission.Id,
                             Content: requested_return_content,
                             Time: (new Date()).getTime(),
                             Static: false,

@@ -101,7 +101,7 @@ export interface t_waitSet {
  */
 export type t_transmissionContent = any;
 
-
+// TODO: t_transmission event needs to be reduced to its barebones and used as an abstract interface for talk, listen, respond and other more specific events
 /**
  * Contains keys that are expected to be transmitted by controller methods
  */
@@ -286,7 +286,9 @@ export interface t_talk<T> {
     Scope: e_Scope;
 }
 
-
+/**
+ * Extends t_transmission for response event 
+ */
 export interface i_Response<T> {
     /** namespace of the sender*/
     Sender: t_namespace;
@@ -304,9 +306,7 @@ export interface i_Response<T> {
     Channel: t_channel;
 
     /** denotes the service group in service transmissions */
-    Group?: e_ServiceGroup;
-    /** Listening resolution involved with the transmission */
-    Listen?: t_resolutionInstructionNoArgs;
+    Group: e_ServiceGroup;
     /** Talking that is involved with the transmission*/
     Talk: t_ri0;
     /** transmission content that is created by the responder */
@@ -314,7 +314,7 @@ export interface i_Response<T> {
     /** Error content if an error occured*/
     Error?: t_error;
     /** Unique request code*/
-    Id?: t_serviceId;
+    Id: t_serviceId;
     /** epoch when the transmission occured */
     Time: t_epoch;
     Static: boolean;

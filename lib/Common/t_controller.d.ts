@@ -101,12 +101,11 @@ export interface i_Response<T> {
     Sender: t_namespace;
     Recipient: t_namespace;
     Channel: t_channel;
-    Group?: e_ServiceGroup;
-    Listen?: t_resolutionInstructionNoArgs;
+    Group: e_ServiceGroup;
     Talk: t_ri0;
     Content: T;
     Error?: t_error;
-    Id?: t_serviceId;
+    Id: t_serviceId;
     Time: t_epoch;
     Static: boolean;
     LastDynamicTime?: t_epoch;
