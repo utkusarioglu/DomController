@@ -10,6 +10,7 @@ import {
     t_resolutionInstructionNoArgs,
     t_resolutionInstruction,
     t_ri1,
+    t_ri0,
 } from "@utkusarioglu/resolver";
 
 import { t_namespace } from "@utkusarioglu/namespace";
@@ -282,5 +283,41 @@ export interface t_talk<T> {
     /** epoch when the transmission occured */
     Time: t_epoch;
     Static: boolean;
+    Scope: e_Scope;
+}
+
+
+export interface i_Response<T> {
+    /** namespace of the sender*/
+    Sender: t_namespace;
+
+    /** namespace of the recipient*/
+    Recipient: t_namespace;
+
+    /** Redundant info for ease of access, concatenating:
+     * 1- recipient namespace  
+     * 2- method or announcement separator (whichever applies)
+     * 3- service group
+     * 4- id separator (if applies)
+     * 5- id (if applies)
+     */
+    Channel: t_channel;
+
+    /** denotes the service group in service transmissions */
+    Group?: e_ServiceGroup;
+    /** Listening resolution involved with the transmission */
+    Listen?: t_resolutionInstructionNoArgs;
+    /** Talking that is involved with the transmission*/
+    Talk: t_ri0;
+    /** transmission content that is created by the responder */
+    Content: T;
+    /** Error content if an error occured*/
+    Error?: t_error;
+    /** Unique request code*/
+    Id?: t_serviceId;
+    /** epoch when the transmission occured */
+    Time: t_epoch;
+    Static: boolean;
+    LastDynamicTime?: t_epoch;
     Scope: e_Scope;
 }

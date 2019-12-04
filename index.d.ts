@@ -88,7 +88,7 @@ declare module '@utkusarioglu/dom-controller/Common/c_controller' {
 
 declare module '@utkusarioglu/dom-controller/Common/t_controller' {
     import { BaseController } from "@utkusarioglu/dom-controller/BaseController/base_controller";
-    import { t_resolutionInstructionNoArgs, t_resolutionInstruction } from "@utkusarioglu/resolver";
+    import { t_resolutionInstructionNoArgs, t_resolutionInstruction, t_ri0 } from "@utkusarioglu/resolver";
     import { t_namespace } from "@utkusarioglu/namespace";
     export type t_epoch = number;
     export enum e_Scope {
@@ -184,6 +184,21 @@ declare module '@utkusarioglu/dom-controller/Common/t_controller' {
         Error?: t_error;
         Time: t_epoch;
         Static: boolean;
+        Scope: e_Scope;
+    }
+    export interface i_Response<T> {
+        Sender: t_namespace;
+        Recipient: t_namespace;
+        Channel: t_channel;
+        Group?: e_ServiceGroup;
+        Listen?: t_resolutionInstructionNoArgs;
+        Talk: t_ri0;
+        Content: T;
+        Error?: t_error;
+        Id?: t_serviceId;
+        Time: t_epoch;
+        Static: boolean;
+        LastDynamicTime?: t_epoch;
         Scope: e_Scope;
     }
 }

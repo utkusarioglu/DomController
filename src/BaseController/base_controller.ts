@@ -157,6 +157,7 @@ export class BaseController extends SeparatorHandler {
         const request_packet: t_transmission = {
             Channel: response_channel,
             Sender: sender_namespace,
+            Group: group,
             Recipient: recipient_namespace,
             Talk: talk,
             Id: service_id,
@@ -237,6 +238,7 @@ export class BaseController extends SeparatorHandler {
                             Sender: transmission.Recipient,
                             Recipient: transmission.Sender,
                             Talk: transmission.Talk,
+                            Group: group,
                             Channel: transmission.Channel,
                             Content: requested_return_content,
                             Time: (new Date()).getTime(),
@@ -476,6 +478,7 @@ export class BaseController extends SeparatorHandler {
         scope: t_singleScope,
         subcribed_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
+        // TODO: t_talk may use a more specific type than t_talk<any> maybe what subscribe and announce transmits needs to be re-evaluated to make the methods more diverse
         callback: (transmission: t_talk<any>) => void,
     ): void {
 
