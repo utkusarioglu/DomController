@@ -26,4 +26,6 @@ export {
     t_reception,
     t_channel,
     t_waitSet,
+    i_talk,
+    i_Response,
 } from "./Common/t_controller";

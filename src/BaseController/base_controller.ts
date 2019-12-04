@@ -22,7 +22,7 @@ import {
     t_singleScope,
     t_channel,
     t_epoch,
-    t_talk,
+    i_talk,
 } from "../Common/t_controller";
 import {
     t_resolutionInstruction,
@@ -480,7 +480,7 @@ export class BaseController extends SeparatorHandler {
         subcribed_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
         // TODO: t_talk may use a more specific type than t_talk<any> maybe what subscribe and announce transmits needs to be re-evaluated to make the methods more diverse
-        callback: (transmission: t_talk<any>) => void,
+        callback: (transmission: i_talk<any>) => void,
     ): void {
 
         const expression_trail: t_expressionTrail =

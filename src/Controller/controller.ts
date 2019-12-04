@@ -40,7 +40,7 @@ import {
     t_localControllerStack,
     t_channel,
     t_epoch,
-    t_talk,
+    i_talk,
 } from "../Common/t_controller";
 import { i_map } from "@utkusarioglu/state/t_state"; // This should be removed
 import { t_namespace } from "@utkusarioglu/namespace";
@@ -534,7 +534,7 @@ export class Controller extends SeparatorHandler {
         scope: t_scope,
         subcribed_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
-        callback: (transmission: t_talk<any>) => void,
+        callback: (transmission: i_talk<any>) => void,
     ): void {
 
         this.get_Scopes(scope).forEach((active_scope: BaseController) => {

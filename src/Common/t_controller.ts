@@ -263,7 +263,7 @@ export interface i_map<T> { [key: string]: T; }
 /**
  * Sub set of t_transmission for talk event
  */
-export interface t_talk<T> {
+export interface i_talk<T> {
     /** namespace of the sender*/
     Sender: t_namespace;
     /** namespace of the recipient*/
