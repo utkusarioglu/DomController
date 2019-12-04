@@ -366,7 +366,7 @@ export class BaseController extends SeparatorHandler {
     ): void {
 
         const expression_trail: t_expressionTrail =
-            Resolution.extract_ExpressionTrail_FromResolutionInstruction(talk);
+            Resolution.extract_ExpressionTrail(talk);
 
         const announcement_channel: string = recipient_namespace +
             this.get_Separator("Monologue") +
@@ -480,7 +480,7 @@ export class BaseController extends SeparatorHandler {
     ): void {
 
         const expression_trail: t_expressionTrail =
-            Resolution.extract_ExpressionTrail_FromResolutionInstruction(listen);
+            Resolution.extract_ExpressionTrail(listen);
 
         const channel: t_channel = subcribed_namespace +
             this.get_Separator("Monologue") +
@@ -554,7 +554,7 @@ export class BaseController extends SeparatorHandler {
             if (current_count > 0) {
 
                 const expression_trail: t_expressionTrail =
-                    Resolution.extract_ExpressionTrail_FromResolutionInstruction(
+                    Resolution.extract_ExpressionTrail(
                         listen,
                     );
 

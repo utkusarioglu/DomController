@@ -85,7 +85,7 @@ export class BaseController extends SeparatorHandler {
         return this._dialogue_emitter.eventNames();
     }
     announce(scope, sender_namespace, recipient_namespace, talk, delay = false) {
-        const expression_trail = Resolution.extract_ExpressionTrail_FromResolutionInstruction(talk);
+        const expression_trail = Resolution.extract_ExpressionTrail(talk);
         const announcement_channel = recipient_namespace +
             this.get_Separator("Monologue") +
             expression_trail;
@@ -124,7 +124,7 @@ export class BaseController extends SeparatorHandler {
         });
     }
     subscribe(scope, subcribed_namespace, listen, callback) {
-        const expression_trail = Resolution.extract_ExpressionTrail_FromResolutionInstruction(listen);
+        const expression_trail = Resolution.extract_ExpressionTrail(listen);
         const channel = subcribed_namespace +
             this.get_Separator("Monologue") +
             expression_trail;
@@ -143,7 +143,7 @@ export class BaseController extends SeparatorHandler {
                 }
             };
             if (current_count > 0) {
-                const expression_trail = Resolution.extract_ExpressionTrail_FromResolutionInstruction(listen);
+                const expression_trail = Resolution.extract_ExpressionTrail(listen);
                 const channel = recipient_namespace +
                     this.get_Separator("Monologue") +
                     expression_trail;
