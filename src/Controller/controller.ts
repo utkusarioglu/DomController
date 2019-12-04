@@ -534,7 +534,7 @@ export class Controller extends SeparatorHandler {
         scope: t_scope,
         subcribed_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
-        callback: (transmission: t_talk<t_ri0>) => void,
+        callback: (transmission: t_talk<any>) => void,
     ): void {
 
         this.get_Scopes(scope).forEach((active_scope: BaseController) => {

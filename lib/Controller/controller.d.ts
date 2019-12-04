@@ -1,4 +1,3 @@
-import { t_ri0 } from "@utkusarioglu/resolver";
 import { SeparatorHandler } from "../Common/separator_handler";
 import { t_resolutionInstruction, t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
 import { t_scope, t_singleScope, t_waitSet, t_transmission, e_ServiceGroup, t_staticContentArchive, t_localControllerStack, t_epoch, t_talk } from "../Common/t_controller";
@@ -26,7 +25,7 @@ export declare class Controller extends SeparatorHandler {
     announce(scope: t_scope, recipient_namespace: t_namespace, talk: t_resolutionInstruction, delay?: boolean | t_epoch): void;
     private static is_StaticResponder;
     get_AnnouncementArchive(scope: t_singleScope): object[];
-    subscribe(scope: t_scope, subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: t_talk<t_ri0>) => void): void;
+    subscribe(scope: t_scope, subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: t_talk<any>) => void): void;
     wait(scope: t_singleScope, recipient_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, test_callback?: (transmission: t_transmission) => boolean, action_callback?: (transmission: t_transmission) => void, count?: number, current_count?: number): Promise<any>;
     wait_Some(scope: t_singleScope, wait_set: t_waitSet[]): Promise<any>;
     set_LocalNamespace(local_namespace: t_namespace): this;

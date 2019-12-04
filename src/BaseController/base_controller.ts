@@ -476,7 +476,7 @@ export class BaseController extends SeparatorHandler {
         scope: t_singleScope,
         subcribed_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
-        callback: (transmission: t_talk<t_ri0>) => void,
+        callback: (transmission: t_talk<any>) => void,
     ): void {
 
         const expression_trail: t_expressionTrail =
