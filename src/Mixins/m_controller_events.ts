@@ -36,7 +36,7 @@ import {
     t_announcement,
     e_Scope,
     e_ServiceGroup,
-    i_Response,
+    t_transmission,
     t_singleScope,
     t_sequenceStep,
 } from "../Common/t_controller";
@@ -474,7 +474,7 @@ export abstract class M_ControllerEvents {
                 scope,
                 manager_namespace,
                 step.Listen,
-                (transmission: i_Response) => {
+                (transmission: t_transmission) => {
 
                     step.List = step.List.filter((value: string) => {
                         return value !== transmission.Sender;

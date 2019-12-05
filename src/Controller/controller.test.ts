@@ -1,6 +1,6 @@
 import { Controller } from "./controller";
 import { C_StartupTalk } from "../Common/c_controller";
-import { i_Response, e_Scope } from "../Common/t_controller";
+import { t_transmission, e_Scope } from "../Common/t_controller";
 import { t_resolutionInstruction } from "@utkusarioglu/resolver";
 
 test("Controller.listen&talk.Global", () => {
@@ -15,7 +15,7 @@ test("Controller.listen&talk.Global", () => {
             e_Scope.Global,
             subscribed_namespace,
             C_StartupTalk.send_Archive,
-            (transmission: i_Response) => {
+            (transmission: t_transmission) => {
                 resolve((transmission.Talk as t_resolutionInstruction)[2][0]);
             },
         );
@@ -43,7 +43,7 @@ test("Controller.service.global", () => {
 
     service_controller.respond(
         e_Scope.Global,
-        (transmission: i_Response) => {
+        (transmission: t_transmission) => {
             return Promise.resolve(response_data);
         },
     );
@@ -53,7 +53,7 @@ test("Controller.service.global", () => {
         service_namespace,
         ["RI", "do_Something"],
     ).
-        then((transmission: i_Response) => {
+        then((transmission: t_transmission) => {
             return transmission.Content;
         });
 

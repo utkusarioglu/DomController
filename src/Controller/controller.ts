@@ -33,7 +33,7 @@ import {
     t_scope,
     t_singleScope,
     t_waitSet,
-    i_Response,
+    t_transmission,
     e_ServiceGroup,
     i_staticContentArchive,
     e_Scope,
@@ -41,8 +41,8 @@ import {
     t_channel,
     t_epoch,
     i_talk,
-    i_Response,
     i_Request,
+    i_Response,
 } from "../Common/t_controller";
 import { i_map } from "@utkusarioglu/state/t_state"; // This should be removed
 import { t_namespace } from "@utkusarioglu/namespace";
@@ -361,10 +361,10 @@ export class Controller extends SeparatorHandler {
     private static set_PromisifiedStaticContent(
         channel: t_channel,
         instruction_code: t_instructionCode,
-        static_content: Promise<i_Response>,
+        static_content: Promise<t_transmission>,
     ): void {
         static_content
-            .then((transmission: i_Response) => {
+            .then((transmission: t_transmission) => {
 
                 Controller._static_content_archive.pave(
                     [
@@ -573,8 +573,8 @@ export class Controller extends SeparatorHandler {
         scope: t_singleScope,
         recipient_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
-        test_callback: (transmission: i_Response) => boolean = () => true,
-        action_callback: (transmission: i_Response) => void = () => { },
+        test_callback: (transmission: t_transmission) => boolean = () => true,
+        action_callback: (transmission: t_transmission) => void = () => { },
         count: number = 1,
         current_count: number = count,
     ): Promise<any> {

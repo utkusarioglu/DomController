@@ -91,9 +91,9 @@ export interface t_waitSet {
     /** the resolution to listen to */
     Listen: t_resolutionInstructionNoArgs;
     /** callback function to determine if the emit from the awaited meets the requirements*/
-    Test?: (transmission: i_Response) => boolean;
+    Test?: (transmission: t_transmission) => boolean;
     /** callback to be executed once the awaited passes the test*/
-    Call?: (transmission: i_Response) => any;
+    Call?: (transmission: t_transmission) => any;
 }
 
 /**
@@ -105,7 +105,7 @@ export type t_transmissionContent = any;
 /**
  * Contains keys that are expected to be transmitted by controller methods
  */
-export interface i_Response {
+export interface t_transmission {
     /** namespace of the sender*/
     Sender: t_namespace;
     /** namespace of the recipient*/

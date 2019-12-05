@@ -18,7 +18,7 @@ export {
 
 export {
     e_Scope,
-    i_Response,
+    t_transmission,
     t_subscription,
     t_sequenceStep,
     t_dependency_group,
@@ -27,5 +27,5 @@ export {
     t_channel,
     t_waitSet,
     i_talk,
-    i_Response,
+    i_Response
 } from "./Common/t_controller";
