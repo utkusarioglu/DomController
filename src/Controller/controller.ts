@@ -33,14 +33,16 @@ import {
     t_scope,
     t_singleScope,
     t_waitSet,
-    t_transmission,
+    i_Response,
     e_ServiceGroup,
-    t_staticContentArchive,
+    i_staticContentArchive,
     e_Scope,
     t_localControllerStack,
     t_channel,
     t_epoch,
     i_talk,
+    i_Response,
+    i_Request,
 } from "../Common/t_controller";
 import { i_map } from "@utkusarioglu/state/t_state"; // This should be removed
 import { t_namespace } from "@utkusarioglu/namespace";
@@ -98,7 +100,7 @@ export class Controller extends SeparatorHandler {
     /** 
      *  Holds the static content for every responder 
      */
-    private static _static_content_archive: t_staticContentArchive = {};
+    private static _static_content_archive: i_staticContentArchive = {};
 
     /** 
      *  Channels that respond statically 
@@ -169,12 +171,12 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public request(
+    public request<T>(
         scope: t_singleScope,
         responding_namespace: t_namespace,
         talk: t_resolutionInstruction,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
-    ): Promise<t_transmission> {
+    ): Promise<i_Response<T>> {
 
         const responding_channel =
             responding_namespace +
@@ -209,7 +211,7 @@ export class Controller extends SeparatorHandler {
 
                     return dynamic_transmission;
                 },
-                (static_transmisson: t_transmission) => {
+                (static_transmisson: i_Response<T>) => {
 
                     console.warn("Serving static content");
 
@@ -220,7 +222,7 @@ export class Controller extends SeparatorHandler {
 
         } else {
 
-            return this.request_DynamicTransmission(
+            return this.request_DynamicTransmission<T>(
                 scope,
                 responding_namespace,
                 talk,
@@ -242,12 +244,12 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    private request_DynamicTransmission(
+    private request_DynamicTransmission<T>(
         scope: t_singleScope,
         recipient_namespace: t_namespace,
         talk: t_resolutionInstruction,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
-    ): Promise<t_transmission> {
+    ): Promise<i_Response<T>> {
         return this
             .get_Scopes(scope)[0]
             .request(
@@ -286,7 +288,7 @@ export class Controller extends SeparatorHandler {
      */
     public respond(
         scope: t_scope,
-        response_func: (t_transmission: t_transmission) => Promise<any>,
+        response_func: (transmission: i_Request) => Promise<any>,
         is_static: boolean = true,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
     ): void {
@@ -359,10 +361,10 @@ export class Controller extends SeparatorHandler {
     private static set_PromisifiedStaticContent(
         channel: t_channel,
         instruction_code: t_instructionCode,
-        static_content: Promise<t_transmission>,
+        static_content: Promise<i_Response>,
     ): void {
         static_content
-            .then((transmission: t_transmission) => {
+            .then((transmission: i_Response) => {
 
                 Controller._static_content_archive.pave(
                     [
@@ -404,7 +406,7 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public static get_AllStaticContent(): t_staticContentArchive {
+    public static get_AllStaticContent(): i_staticContentArchive {
         return Controller._static_content_archive;
     }
 
@@ -571,8 +573,8 @@ export class Controller extends SeparatorHandler {
         scope: t_singleScope,
         recipient_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
-        test_callback: (transmission: t_transmission) => boolean = () => true,
-        action_callback: (transmission: t_transmission) => void = () => { },
+        test_callback: (transmission: i_Response) => boolean = () => true,
+        action_callback: (transmission: i_Response) => void = () => { },
         count: number = 1,
         current_count: number = count,
     ): Promise<any> {

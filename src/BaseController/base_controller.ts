@@ -16,13 +16,14 @@ import { C_Controller } from "../Common/c_controller";
 import {
     t_serviceId,
     t_waitSet,
-    t_transmission,
+    i_Response,
     e_ServiceGroup,
     e_Scope,
     t_singleScope,
     t_channel,
     t_epoch,
     i_talk,
+    i_Request,
 } from "../Common/t_controller";
 import {
     t_resolutionInstruction,
@@ -154,7 +155,7 @@ export class BaseController extends SeparatorHandler {
         const response_channel: t_channel = request_channel +
             this.get_Separator("Id") +
             service_id;
-        const request_packet: t_transmission = {
+        const request_packet: i_Response = {
             Channel: response_channel,
             Sender: sender_namespace,
             Group: group,
@@ -169,7 +170,7 @@ export class BaseController extends SeparatorHandler {
         return new Promise((resolve, reject) => {
 
             this._dialogue_emitter
-                .once((response_channel), (response_packet: t_transmission) => {
+                .once((response_channel), (response_packet: i_Response) => {
 
                 response_packet.sniff("Error",
                     resolve.bind(null, response_packet),
@@ -181,7 +182,7 @@ export class BaseController extends SeparatorHandler {
 
             this._dialogue_emitter.emit(
                 request_channel,
-                request_packet as t_transmission,
+                request_packet as i_Response,
             );
         });
     }
@@ -218,7 +219,7 @@ export class BaseController extends SeparatorHandler {
      */
     public respond(
         responder_namespace: t_namespace,
-        response_callback: (transmission: t_transmission) => Promise<any>,
+        response_callback: (transmission: i_Request) => Promise<any>,
         group: e_ServiceGroup,
         scope: e_Scope,
     ): void {
@@ -229,12 +230,12 @@ export class BaseController extends SeparatorHandler {
             group;
 
         this._dialogue_emitter.on(listen_channel,
-            (transmission: t_transmission) => {
+            (transmission: i_Request) => {
 
                 response_callback(transmission)
                     .then((requested_return_content: any) => { 
 
-                        const serve_packet: t_transmission = {
+                        const serve_packet: i_Response = {
                             Sender: transmission.Recipient,
                             Recipient: transmission.Sender,
                             Talk: transmission.Talk,
@@ -249,7 +250,7 @@ export class BaseController extends SeparatorHandler {
 
                         this._dialogue_emitter
                             .emit(
-                                transmission.Channel as t_channel,
+                                transmission.Channel,
                                 serve_packet,
                             );
 
@@ -277,8 +278,8 @@ export class BaseController extends SeparatorHandler {
      * Service: Controller
      */
     private archive_Dialogue(
-        request_packet: t_transmission,
-        response_packet: t_transmission,
+        request_packet: i_Response,
+        response_packet: i_Response,
     ): void {
 
         this._dialogue_archive.push({
@@ -375,7 +376,7 @@ export class BaseController extends SeparatorHandler {
             this.get_Separator("Monologue") +
             expression_trail;
 
-        const announcement_packet: t_transmission = {
+        const announcement_packet: i_Response = {
             Channel: announcement_channel,
             Sender: sender_namespace,
             Recipient: recipient_namespace,
@@ -492,7 +493,7 @@ export class BaseController extends SeparatorHandler {
 
         this._monologue_emitter.on(
             channel,
-            callback as (transmission: t_transmission) => void,
+            callback as (transmission: i_Response) => void,
         );
     }
 
@@ -524,8 +525,8 @@ export class BaseController extends SeparatorHandler {
         waiter_namespace: t_namespace,
         recipient_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
-        test_callback: (transmission: t_transmission) => boolean = () => true ,
-        action_callback: (transmission: t_transmission) => any =
+        test_callback: (transmission: i_Response) => boolean = () => true ,
+        action_callback: (transmission: i_Response) => any =
             (transmission) => transmission,
         total_count: number = 1,
         current_count: number = total_count,
@@ -533,7 +534,7 @@ export class BaseController extends SeparatorHandler {
 
         return new Promise((resolve, reject) => {
 
-            const once_callback_function = (transmission: t_transmission) => {
+            const once_callback_function = (transmission: i_Response) => {
 
                 if (test_callback(transmission)) {
                     current_count--;
@@ -594,7 +595,7 @@ export class BaseController extends SeparatorHandler {
         scope: t_singleScope,
         waiter_namespace: t_namespace,
         wait_set: t_waitSet[],
-    ): Promise<t_transmission[]> {
+    ): Promise<i_Response[]> {
         return Promise.all(wait_set.map((wait_event: t_waitSet) => {
             return this.wait(
                 scope,

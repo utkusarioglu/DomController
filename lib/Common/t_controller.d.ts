@@ -16,11 +16,11 @@ export declare type t_serviceId = string;
 export interface t_waitSet {
     Namespace: t_namespace;
     Listen: t_resolutionInstructionNoArgs;
-    Test?: (transmission: t_transmission) => boolean;
-    Call?: (transmission: t_transmission) => any;
+    Test?: (transmission: i_Response) => boolean;
+    Call?: (transmission: i_Response) => any;
 }
 export declare type t_transmissionContent = any;
-export interface t_transmission {
+export interface i_Response {
     Sender: t_namespace;
     Recipient: t_namespace;
     Channel: t_channel;
@@ -69,9 +69,9 @@ export interface t_announcement {
 export declare enum e_ServiceGroup {
     Standard = 0
 }
-export interface t_staticContentArchive {
+export interface i_staticContentArchive {
     [channel: string]: {
-        [unique_request_code: string]: t_transmission;
+        [unique_request_code: string]: i_Response<any>;
     };
 }
 export interface t_localControllerStack {
@@ -109,5 +109,16 @@ export interface i_Response<T> {
     Time: t_epoch;
     Static: boolean;
     LastDynamicTime?: t_epoch;
+    Scope: e_Scope;
+}
+export interface i_Request {
+    Channel: t_channel;
+    Sender: t_namespace;
+    Group: e_ServiceGroup;
+    Recipient: t_namespace;
+    Talk: t_ri0;
+    Id: t_serviceId;
+    Time: t_epoch;
+    Static: boolean;
     Scope: e_Scope;
 }

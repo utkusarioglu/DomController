@@ -18,7 +18,7 @@ export {
 
 export {
     e_Scope,
-    t_transmission,
+    i_Response,
     t_subscription,
     t_sequenceStep,
     t_dependency_group,

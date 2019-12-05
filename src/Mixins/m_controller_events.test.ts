@@ -8,7 +8,7 @@
 import { M_ControllerEvents } from "./m_controller_events";
 import { Parent } from "@utkusarioglu/mixer";
 import { t_namespace } from "@utkusarioglu/namespace";
-import { t_sequenceStep, e_Scope, t_transmission } from "../Common/t_controller";
+import { t_sequenceStep, e_Scope, i_Response } from "../Common/t_controller";
 import {
     C_BootState,
     C_StartupTalk,
@@ -64,7 +64,7 @@ test("App.initialize_Controller", () => {
             e_Scope.Global,
             C_Controller.AllServices,
             C_BootState.ClassReady,
-            (transmission: t_transmission) => {
+            (transmission: i_Response) => {
                 resolve(transmission.Talk)
             }
         )
@@ -121,7 +121,7 @@ test("Child.announce", () => {
             e_Scope.Global,
             C_Controller.AllServices,
             C_BootState.ClassReady,
-            (transmission: t_transmission) => {
+            (transmission: i_Response) => {
                 resolve(transmission.Talk);
             }
         );

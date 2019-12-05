@@ -91,9 +91,9 @@ export interface t_waitSet {
     /** the resolution to listen to */
     Listen: t_resolutionInstructionNoArgs;
     /** callback function to determine if the emit from the awaited meets the requirements*/
-    Test?: (transmission: t_transmission) => boolean;
+    Test?: (transmission: i_Response) => boolean;
     /** callback to be executed once the awaited passes the test*/
-    Call?: (transmission: t_transmission) => any;
+    Call?: (transmission: i_Response) => any;
 }
 
 /**
@@ -105,7 +105,7 @@ export type t_transmissionContent = any;
 /**
  * Contains keys that are expected to be transmitted by controller methods
  */
-export interface t_transmission {
+export interface i_Response {
     /** namespace of the sender*/
     Sender: t_namespace;
     /** namespace of the recipient*/
@@ -220,9 +220,9 @@ export enum e_ServiceGroup {
 /**
  * Data structure for Controller class static content archive
  */
-export interface t_staticContentArchive {
+export interface i_staticContentArchive {
     [channel: string]: {
-        [unique_request_code: string]: t_transmission,
+        [unique_request_code: string]: i_Response<any>,
     };
 }
 
@@ -320,4 +320,16 @@ export interface i_Response<T> {
     Static: boolean;
     LastDynamicTime?: t_epoch;
     Scope: e_Scope;
+}
+
+export interface i_Request {
+    Channel: t_channel,
+    Sender: t_namespace,
+    Group: e_ServiceGroup,
+    Recipient: t_namespace,
+    Talk: t_ri0,
+    Id: t_serviceId,
+    Time: t_epoch,
+    Static: boolean,
+    Scope: e_Scope,
 }

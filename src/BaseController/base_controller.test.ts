@@ -1,5 +1,5 @@
 import { BaseController } from "./base_controller";
-import { e_Scope, t_transmission, t_waitSet, e_ServiceGroup } from "../Common/t_controller";
+import { e_Scope, i_Response, t_waitSet, e_ServiceGroup } from "../Common/t_controller";
 import { t_resolutionInstruction } from "@utkusarioglu/resolver";
 import { C_BootState } from "../Common/c_controller";
 import { EventEmitter } from "events";
@@ -58,7 +58,7 @@ test("BaseController.subscribe&announce.Global", () => {
             e_Scope.Global,
             namespace,
             C_BootState.ClassReady,
-            (transmission: t_transmission) => {
+            (transmission: i_Response) => {
                 resolve(transmission.Talk);
             },
         );
@@ -87,7 +87,7 @@ test("BaseController.subscribe&announce.Local", () => {
             e_Scope.Local,
             namespace,
             C_BootState.ClassReady,
-            (transmission: t_transmission) => {
+            (transmission: i_Response) => {
                 resolve(transmission.Talk);
             },
         );
@@ -119,12 +119,12 @@ test("BaseController.wait", () => {
             "waiting/for/emit",
             declaration_namespace,
             C_BootState.ClassReady,
-            (transmission: t_transmission) => {
+            (transmission: i_Response) => {
                 announcement_count++;
                 return (transmission.Talk as t_resolutionInstruction)[2][0]
                     === test_value;
             },
-            (transmission: t_transmission) => {
+            (transmission: i_Response) => {
                 resolve(announcement_count);
             },
         );
@@ -176,7 +176,7 @@ test("BaseController.wait_Some", () => {
             {
                 Namespace: declaration_namespace1,
                 Listen: C_BootState.ClassReady,
-                Test: (transmission: t_transmission) => {
+                Test: (transmission: i_Response) => {
                     announcement_count++;
                     return (transmission.Talk as t_resolutionInstruction)[2][0]
                         === test_value1;
@@ -185,14 +185,14 @@ test("BaseController.wait_Some", () => {
             {
                 Namespace: declaration_namespace2,
                 Listen: C_BootState.ClassReady,
-                Test: (transmission: t_transmission) => {
+                Test: (transmission: i_Response) => {
                     announcement_count++;
                     return (transmission.Talk as t_resolutionInstruction)[2][0]
                         === test_value2;
                 },
             },
         ] as t_waitSet[],
-    ).then((transmissions: t_transmission[]) => {
+    ).then((transmissions: i_Response[]) => {
         return transmissions.map((transmission) => {
             return (transmission.Talk as t_resolutionInstruction)[2][0];
         });
@@ -234,7 +234,7 @@ test("Basecontroller.service", () => {
 
     base_controller.respond(
         responder_namespace,
-        (transmission: t_transmission) => {
+        (transmission: i_Response) => {
             return new Promise((resolve) => {
                 resolve(transmission);
             });
@@ -250,8 +250,8 @@ test("Basecontroller.service", () => {
         ["RI", "set_Banana"],
         e_ServiceGroup.Standard,
     )
-        .then((transmission: t_transmission) => {
-            return (transmission.Content as t_transmission).Time;
+        .then((transmission: i_Response) => {
+            return (transmission.Content as i_Response).Time;
         });
 
     return expect(response).resolves.toBeGreaterThan(1000);
