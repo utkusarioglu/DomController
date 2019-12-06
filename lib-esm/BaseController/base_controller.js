@@ -11,7 +11,7 @@ export class BaseController extends SeparatorHandler {
         this._dialogue_archive = [];
         this._controller_scope = controller_scope;
     }
-    request(scope, sender_namespace, recipient_namespace, talk, group) {
+    request(sender_namespace, recipient_namespace, talk, scope, group) {
         const service_id = BaseController.create_RandomServiceId();
         const request_channel = recipient_namespace +
             this.get_Separator("Dialogue") +
@@ -39,7 +39,7 @@ export class BaseController extends SeparatorHandler {
             this._dialogue_emitter.emit(request_channel, request_packet);
         });
     }
-    respond(responder_namespace, response_callback, group, scope) {
+    respond(responder_namespace, response_callback, scope, group) {
         const listen_channel = responder_namespace +
             this.get_Separator("Dialogue") +
             group;
@@ -87,7 +87,7 @@ export class BaseController extends SeparatorHandler {
     publicget_ServedChannels() {
         return this._dialogue_emitter.eventNames();
     }
-    announce(scope, sender_namespace, recipient_namespace, talk, delay = false) {
+    announce(sender_namespace, recipient_namespace, talk, scope, delay = false) {
         const expression_trail = Resolution.extract_ExpressionTrail(talk);
         const announcement_channel = recipient_namespace +
             this.get_Separator("Monologue") +
@@ -126,14 +126,14 @@ export class BaseController extends SeparatorHandler {
             Time: (new Date()).getTime(),
         });
     }
-    subscribe(scope, subcribed_namespace, listen, callback) {
+    subscribe(subcribed_namespace, listen, callback, scope) {
         const expression_trail = Resolution.extract_ExpressionTrail(listen);
         const channel = subcribed_namespace +
             this.get_Separator("Monologue") +
             expression_trail;
         this._monologue_emitter.on(channel, callback);
     }
-    wait(scope, waiter_namespace, recipient_namespace, listen, test_callback = () => true, action_callback = (transmission) => transmission, total_count = 1, current_count = total_count) {
+    wait(waiter_namespace, recipient_namespace, listen, test_callback = () => true, action_callback = (transmission) => transmission, scope, total_count = 1, current_count = total_count) {
         return new Promise((resolve, reject) => {
             const once_callback_function = (transmission) => {
                 if (test_callback(transmission)) {
@@ -141,7 +141,7 @@ export class BaseController extends SeparatorHandler {
                     resolve(action_callback(transmission));
                 }
                 else {
-                    const new_promise = this.wait(scope, waiter_namespace, recipient_namespace, listen, test_callback, action_callback, total_count, current_count);
+                    const new_promise = this.wait(waiter_namespace, recipient_namespace, listen, test_callback, action_callback, scope, total_count, current_count);
                     resolve(new_promise);
                 }
             };
@@ -159,7 +159,7 @@ export class BaseController extends SeparatorHandler {
     }
     wait_Some(scope, waiter_namespace, wait_set) {
         return Promise.all(wait_set.map((wait_event) => {
-            return this.wait(scope, waiter_namespace, wait_event.Namespace, wait_event.Listen, wait_event.Test, wait_event.Call);
+            return this.wait(waiter_namespace, wait_event.Namespace, wait_event.Listen, wait_event.Test, wait_event.Call, scope);
         }));
     }
 }

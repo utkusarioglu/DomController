@@ -13,7 +13,7 @@ export class Controller extends SeparatorHandler {
         Controller._global_controller = new BaseController(e_Scope.Global);
         Controller.flush_GlobalNamespaces();
     }
-    request(scope, responding_namespace, talk, group = e_ServiceGroup.Standard) {
+    request(responding_namespace, talk, scope = e_Scope.Global, group = e_ServiceGroup.Standard) {
         const responding_channel = responding_namespace +
             this.get_Separator("Dialogue") + group;
         const instruction_code = Resolution.produce_UniqueInstructionCode(talk);
@@ -23,7 +23,7 @@ export class Controller extends SeparatorHandler {
                 responding_channel,
                 instruction_code,
             ], () => {
-                const dynamic_transmission = this.request_DynamicTransmission(scope, responding_namespace, talk, group);
+                const dynamic_transmission = this.request_DynamicTransmission(responding_namespace, talk, scope, group);
                 Controller.set_PromisifiedStaticContent(responding_channel, instruction_code, dynamic_transmission);
                 return dynamic_transmission;
             }, (static_transmisson) => {
@@ -33,22 +33,22 @@ export class Controller extends SeparatorHandler {
             });
         }
         else {
-            return this.request_DynamicTransmission(scope, responding_namespace, talk, group);
+            return this.request_DynamicTransmission(responding_namespace, talk, scope, group);
         }
     }
-    request_DynamicTransmission(scope, recipient_namespace, talk, group = e_ServiceGroup.Standard) {
+    request_DynamicTransmission(recipient_namespace, talk, scope = e_Scope.Global, group = e_ServiceGroup.Standard) {
         return this
             .get_Scopes(scope)[0]
-            .request(scope, this._controller_global_namespace, recipient_namespace, talk, group);
+            .request(this._controller_global_namespace, recipient_namespace, talk, scope, group);
     }
-    respond(scope, response_func, is_static = true, group = e_ServiceGroup.Standard) {
+    respond(response_func, is_static = true, scope = e_Scope.Global, group = e_ServiceGroup.Standard) {
         if (is_static) {
             Controller._static_responders.push(this._controller_global_namespace +
                 this.get_Separator("Dialogue") +
                 group);
         }
         this.get_Scopes(scope).forEach((active_scope) => {
-            active_scope.respond(this._controller_global_namespace, response_func, group, scope);
+            active_scope.respond(this._controller_global_namespace, response_func, scope, group);
         });
     }
     get_DialogueArchive(scope) {
@@ -83,9 +83,9 @@ export class Controller extends SeparatorHandler {
         console.log(C_Controller.E_ForcedDynamic);
         Controller._forced_dynamic_service = true;
     }
-    announce(scope, recipient_namespace, talk, delay = false) {
+    announce(recipient_namespace, talk, scope = e_Scope.Global, delay = false) {
         this.get_Scopes(scope).forEach((active_scope) => {
-            active_scope.announce(scope, this._controller_global_namespace, recipient_namespace, talk, delay);
+            active_scope.announce(this._controller_global_namespace, recipient_namespace, talk, scope, delay);
         });
     }
     static is_StaticResponder(channel) {
@@ -94,16 +94,16 @@ export class Controller extends SeparatorHandler {
     get_AnnouncementArchive(scope) {
         return this.get_Scopes(scope)[0].get_AnnouncementArchive();
     }
-    subscribe(scope, subcribed_namespace, listen, callback) {
+    subscribe(subcribed_namespace, listen, callback, scope = e_Scope.Global) {
         this.get_Scopes(scope).forEach((active_scope) => {
-            active_scope.subscribe(scope, subcribed_namespace, listen, callback);
+            active_scope.subscribe(subcribed_namespace, listen, callback, scope);
         });
     }
-    wait(scope, recipient_namespace, listen, test_callback = () => true, action_callback = () => { }, count = 1, current_count = count) {
-        const wait_response = this.get_Scopes(scope)[0].wait(scope, this._controller_global_namespace, recipient_namespace, listen, test_callback, action_callback, count, current_count);
+    wait(recipient_namespace, listen, test_callback = () => true, action_callback = () => { }, scope, count = 1, current_count = count) {
+        const wait_response = this.get_Scopes(scope)[0].wait(this._controller_global_namespace, recipient_namespace, listen, test_callback, action_callback, scope, count, current_count);
         return wait_response;
     }
-    wait_Some(scope, wait_set) {
+    wait_Some(wait_set, scope) {
         return this
             .get_Scopes(scope)[0]
             .wait_Some(scope, this._controller_global_namespace, wait_set);

@@ -172,9 +172,9 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     public request<T>(
-        scope: t_singleScope,
         responding_namespace: t_namespace,
-        talk: t_resolutionInstruction,
+        talk: t_ri0,
+        scope: t_singleScope = e_Scope.Global,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
     ): Promise<i_Response<T>> {
 
@@ -197,9 +197,9 @@ export class Controller extends SeparatorHandler {
 
                     const dynamic_transmission =
                         this.request_DynamicTransmission(
-                            scope,
                             responding_namespace,
                             talk,
+                            scope,
                             group,
                         );
 
@@ -223,9 +223,9 @@ export class Controller extends SeparatorHandler {
         } else {
 
             return this.request_DynamicTransmission<T>(
-                scope,
                 responding_namespace,
                 talk,
+                scope,
                 group,
             );
 
@@ -245,18 +245,19 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     private request_DynamicTransmission<T>(
-        scope: t_singleScope,
         recipient_namespace: t_namespace,
-        talk: t_resolutionInstruction,
+        talk: t_ri0,
+        scope: t_singleScope = e_Scope.Global,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
     ): Promise<i_Response<T>> {
         return this
             .get_Scopes(scope)[0]
             .request(
-                scope,
                 this._controller_global_namespace,
                 recipient_namespace,
-                talk, group,
+                talk,
+                scope,
+                group,
             );
     }
 
@@ -287,9 +288,9 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     public respond(
-        scope: t_scope,
         response_func: (transmission: i_Request) => Promise<any>,
         is_static: boolean = true,
+        scope: t_scope = e_Scope.Global,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
     ): void {
 
@@ -305,8 +306,8 @@ export class Controller extends SeparatorHandler {
             active_scope.respond(
                 this._controller_global_namespace,
                 response_func,
-                group,
                 scope,
+                group,
             );
         });
     }
@@ -466,18 +467,18 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     public announce(
-        scope: t_scope,
         recipient_namespace: t_namespace,
-        talk: t_resolutionInstruction,
+        talk: t_ri0,
+        scope: t_scope = e_Scope.Global,
         delay: boolean | t_epoch = false,
     ): void {
 
         this.get_Scopes(scope).forEach((active_scope: BaseController) => {
             active_scope.announce(
-                scope as t_singleScope,
                 this._controller_global_namespace,
                 recipient_namespace,
                 talk,
+                scope as t_singleScope,
                 delay,
             );
         });
@@ -533,18 +534,19 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     public subscribe(
-        scope: t_scope,
         subcribed_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
         callback: (transmission: i_talk<any>) => void,
+        scope: t_scope = e_Scope.Global,
     ): void {
 
         this.get_Scopes(scope).forEach((active_scope: BaseController) => {
             active_scope.subscribe(
-                scope as t_singleScope,
                 subcribed_namespace,
                 listen,
-                callback);
+                callback,
+                scope as t_singleScope,
+            );
         });
     }
      
@@ -570,21 +572,21 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     public wait(
-        scope: t_singleScope,
         recipient_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
         test_callback: (transmission: t_transmission) => boolean = () => true,
         action_callback: (transmission: t_transmission) => void = () => { },
+        scope: t_singleScope,
         count: number = 1,
         current_count: number = count,
     ): Promise<any> {
         const wait_response = this.get_Scopes(scope)[0].wait(
-            scope,
             this._controller_global_namespace,
             recipient_namespace,
             listen,
             test_callback,
             action_callback,
+            scope,
             count,
             current_count,
         );
@@ -603,8 +605,8 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     public wait_Some(
-        scope: t_singleScope,
         wait_set: t_waitSet[],
+        scope: t_singleScope,
     ): Promise<any> {
         return this
             .get_Scopes(scope)[0]

@@ -12,19 +12,19 @@ test("Controller.listen&talk.Global", () => {
 
     const listen = new Promise((resolve) => {
         c.subscribe(
-            e_Scope.Global,
             subscribed_namespace,
             C_StartupTalk.send_Archive,
             (transmission: t_transmission) => {
                 resolve((transmission.Talk as t_resolutionInstruction)[2][0]);
             },
+            //e_Scope.Global,
         );
     });
 
     c.announce(
-        e_Scope.Global,
         subscribed_namespace,
         [...C_StartupTalk.send_Archive, [data]] as t_resolutionInstruction,
+        //e_Scope.Global,
     );
 
     return expect(listen).resolves.toBe(data);
@@ -42,16 +42,17 @@ test("Controller.service.global", () => {
     const response_data = "response_data";
 
     service_controller.respond(
-        e_Scope.Global,
         (transmission: t_transmission) => {
             return Promise.resolve(response_data);
         },
+        //false,
+        //e_Scope.Global,
     );
 
     const response = consuming_controller.request(
-        e_Scope.Global,
         service_namespace,
         ["RI", "do_Something"],
+        //e_Scope.Global,
     ).
         then((transmission: t_transmission) => {
             return transmission.Content;

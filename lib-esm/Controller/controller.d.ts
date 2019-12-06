@@ -1,5 +1,6 @@
+import { t_ri0 } from "@utkusarioglu/resolver";
 import { SeparatorHandler } from "../Common/separator_handler";
-import { t_resolutionInstruction, t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
+import { t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
 import { t_scope, t_singleScope, t_waitSet, t_transmission, e_ServiceGroup, i_staticContentArchive, t_localControllerStack, t_epoch, i_talk, i_Request, i_Response } from "../Common/t_controller";
 import { t_namespace } from "@utkusarioglu/namespace";
 export declare class Controller extends SeparatorHandler {
@@ -13,21 +14,21 @@ export declare class Controller extends SeparatorHandler {
     private static _forced_dynamic_service;
     constructor(namespace: t_namespace);
     static flush_GlobalController(): void;
-    request<T>(scope: t_singleScope, responding_namespace: t_namespace, talk: t_resolutionInstruction, group?: e_ServiceGroup): Promise<i_Response<T>>;
+    request<T>(responding_namespace: t_namespace, talk: t_ri0, scope?: t_singleScope, group?: e_ServiceGroup): Promise<i_Response<T>>;
     private request_DynamicTransmission;
-    respond(scope: t_scope, response_func: (transmission: i_Request) => Promise<any>, is_static?: boolean, group?: e_ServiceGroup): void;
+    respond(response_func: (transmission: i_Request) => Promise<any>, is_static?: boolean, scope?: t_scope, group?: e_ServiceGroup): void;
     get_DialogueArchive(scope: t_singleScope): object;
     private static set_PromisifiedStaticContent;
     static get_AllStaticChannels(): t_namespace[];
     static get_AllStaticContent(): i_staticContentArchive;
     static flush_StaticContentArchive(): void;
     static force_AllDynamicService(): void;
-    announce(scope: t_scope, recipient_namespace: t_namespace, talk: t_resolutionInstruction, delay?: boolean | t_epoch): void;
+    announce(recipient_namespace: t_namespace, talk: t_ri0, scope?: t_scope, delay?: boolean | t_epoch): void;
     private static is_StaticResponder;
     get_AnnouncementArchive(scope: t_singleScope): object[];
-    subscribe(scope: t_scope, subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void): void;
-    wait(scope: t_singleScope, recipient_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, test_callback?: (transmission: t_transmission) => boolean, action_callback?: (transmission: t_transmission) => void, count?: number, current_count?: number): Promise<any>;
-    wait_Some(scope: t_singleScope, wait_set: t_waitSet[]): Promise<any>;
+    subscribe(subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void, scope?: t_scope): void;
+    wait(recipient_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, test_callback: ((transmission: t_transmission) => boolean) | undefined, action_callback: ((transmission: t_transmission) => void) | undefined, scope: t_singleScope, count?: number, current_count?: number): Promise<any>;
+    wait_Some(wait_set: t_waitSet[], scope: t_singleScope): Promise<any>;
     set_LocalNamespace(local_namespace: t_namespace): this;
     get_LocalNamespace(): t_namespace;
     get_LocalNamespaces(): t_namespace[];

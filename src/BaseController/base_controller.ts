@@ -141,10 +141,10 @@ export class BaseController extends SeparatorHandler {
      * Service: Controller
      */
     public request(
-        scope: e_Scope,
         sender_namespace: t_namespace,
         recipient_namespace: t_namespace,
         talk: t_resolutionInstruction,
+        scope: e_Scope,
         group: e_ServiceGroup,
     ): Promise<any> {
 
@@ -220,8 +220,8 @@ export class BaseController extends SeparatorHandler {
     public respond(
         responder_namespace: t_namespace,
         response_callback: (transmission: i_Request) => Promise<any>,
-        group: e_ServiceGroup,
         scope: e_Scope,
+        group: e_ServiceGroup,
     ): void {
 
         const listen_channel: t_channel =
@@ -362,10 +362,10 @@ export class BaseController extends SeparatorHandler {
      * Service: Controller
      */
     public announce(
-        scope: t_singleScope,
         sender_namespace: t_namespace,
         recipient_namespace: t_namespace,
         talk: t_resolutionInstruction,
+        scope: t_singleScope,
         delay: boolean | t_epoch = false,
     ): void {
 
@@ -477,11 +477,11 @@ export class BaseController extends SeparatorHandler {
      * Service: Controller
      */
     public subscribe(
-        scope: t_singleScope,
         subcribed_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
         // TODO: t_talk may use a more specific type than t_talk<any> maybe what subscribe and announce transmits needs to be re-evaluated to make the methods more diverse
         callback: (transmission: i_talk<any>) => void,
+        scope: t_singleScope,
     ): void {
 
         const expression_trail: t_expressionTrail =
@@ -521,13 +521,13 @@ export class BaseController extends SeparatorHandler {
      * Service: Controller
      */
     public wait(
-        scope: t_singleScope,
         waiter_namespace: t_namespace,
         recipient_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
         test_callback: (transmission: t_transmission) => boolean = () => true ,
         action_callback: (transmission: t_transmission) => any =
             (transmission) => transmission,
+        scope: t_singleScope,
         total_count: number = 1,
         current_count: number = total_count,
     ): Promise<any> {
@@ -542,12 +542,12 @@ export class BaseController extends SeparatorHandler {
                 } else {
 
                     const new_promise = this.wait(
-                            scope,
                             waiter_namespace,
                             recipient_namespace,
                             listen,
                             test_callback,
                             action_callback,
+                            scope,
                             total_count,
                             current_count,
                         );
@@ -598,12 +598,12 @@ export class BaseController extends SeparatorHandler {
     ): Promise<t_transmission[]> {
         return Promise.all(wait_set.map((wait_event: t_waitSet) => {
             return this.wait(
-                scope,
                 waiter_namespace,
                 wait_event.Namespace,
                 wait_event.Listen,
                 wait_event.Test,
                 wait_event.Call,
+                scope,
             );
         }));
     }
