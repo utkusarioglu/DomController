@@ -102,7 +102,7 @@ export class Controller extends SeparatorHandler {
         });
         return this;
     }
-    wait(recipient_namespace, listen, test_callback = () => true, action_callback = () => { }, scope, count = 1, current_count = count) {
+    wait(recipient_namespace, listen, test_callback = () => true, action_callback = () => { }, scope = e_Scope.Global, count = 1, current_count = count) {
         const wait_response = this.get_Scopes(scope)[0].wait(this._controller_global_namespace, recipient_namespace, listen, test_callback, action_callback, scope, count, current_count);
         return wait_response;
     }

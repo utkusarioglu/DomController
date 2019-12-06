@@ -582,7 +582,7 @@ export class Controller extends SeparatorHandler {
         listen: t_resolutionInstructionNoArgs,
         test_callback: (transmission: t_transmission) => boolean = () => true,
         action_callback: (transmission: t_transmission) => void = () => { },
-        scope: t_singleScope,
+        scope: t_singleScope = e_Scope.Global,
         count: number = 1,
         current_count: number = count,
     ): Promise<any> {
