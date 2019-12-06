@@ -55,11 +55,11 @@ test("BaseController.subscribe&announce.Global", () => {
 
     const subscription = new Promise((resolve, reject) => {
         base_controller.subscribe(
-            namespace,
             C_BootState.ClassReady,
             (transmission: t_transmission) => {
                 resolve(transmission.Talk);
             },
+            namespace,
             e_Scope.Global,
         );
 
@@ -84,11 +84,11 @@ test("BaseController.subscribe&announce.Local", () => {
 
     const subscription = new Promise((resolve, reject) => {
         base_controller.subscribe(
-            namespace,
             C_BootState.ClassReady,
             (transmission: t_transmission) => {
                 resolve(transmission.Talk);
             },
+            namespace,
             e_Scope.Local,
         );
 

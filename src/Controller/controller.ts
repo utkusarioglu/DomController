@@ -538,17 +538,17 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     public subscribe(
-        subcribed_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
         callback: (transmission: i_talk<any>) => void,
+        subcribed_namespace: t_namespace = this.get_GlobalNamespace(),
         scope: t_scope = e_Scope.Global,
     ): this {
 
         this.get_Scopes(scope).forEach((active_scope: BaseController) => {
             active_scope.subscribe(
-                subcribed_namespace,
                 listen,
                 callback,
+                subcribed_namespace,
                 scope as t_singleScope,
             );
         });

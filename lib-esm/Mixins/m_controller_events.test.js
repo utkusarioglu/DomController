@@ -23,9 +23,9 @@ test("App.initialize_Controller", () => {
     };
     const controller = new Controller("Observer");
     const subscription = new Promise((resolve) => {
-        controller.subscribe(C_Controller.AllServices, C_BootState.ClassReady, (transmission) => {
+        controller.subscribe(C_BootState.ClassReady, (transmission) => {
             resolve(transmission.Talk);
-        }, e_Scope.Global);
+        }, C_Controller.AllServices, e_Scope.Global);
     });
     const app_instance = new app_class_expression();
     return expect(subscription).resolves.toBe(C_BootState.ClassReady);
@@ -52,9 +52,9 @@ test("Child.announce", () => {
     };
     const controller = new Controller("Observer");
     const response = new Promise((resolve) => {
-        controller.subscribe(C_Controller.AllServices, C_BootState.ClassReady, (transmission) => {
+        controller.subscribe(C_BootState.ClassReady, (transmission) => {
             resolve(transmission.Talk);
-        }, e_Scope.Global);
+        }, C_Controller.AllServices, e_Scope.Global);
     });
     const child1 = (new child_class_exp1());
     return expect(response).resolves.toBe(C_BootState.ClassReady);

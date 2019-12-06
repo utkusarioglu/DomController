@@ -477,10 +477,10 @@ export class BaseController extends SeparatorHandler {
      * Service: Controller
      */
     public subscribe(
-        subcribed_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
         // TODO: t_talk may use a more specific type than t_talk<any> maybe what subscribe and announce transmits needs to be re-evaluated to make the methods more diverse
         callback: (transmission: i_talk<any>) => void,
+        subcribed_namespace: t_namespace,
         scope: t_singleScope,
     ): void {
 

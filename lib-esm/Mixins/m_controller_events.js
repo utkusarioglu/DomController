@@ -76,7 +76,7 @@ export class M_ControllerEvents {
     register_Subscriptions() {
         if (this._subscriptions) {
             this._subscriptions.forEach((subscription) => {
-                this.get_Controller().subscribe(subscription.Namespace, subscription.Listen, subscription.Call, subscription.Scope);
+                this.get_Controller().subscribe(subscription.Listen, subscription.Call, subscription.Namespace, subscription.Scope);
             });
         }
     }

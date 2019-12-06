@@ -54,7 +54,7 @@ export abstract class M_Controller {
      * Class: M_Controller
      * Service: Controller
      */
-    protected set_Controller(): void {
+    protected set_Controller(): this {
 
         if (this._controller) {
             throw new Error(C_Controller.E_AlreadyDefined);
@@ -66,6 +66,7 @@ export abstract class M_Controller {
             this._controller.set_LocalNamespace(this.get_LocalNamespace());
         }
 
+        return this;
     }
 
     /**

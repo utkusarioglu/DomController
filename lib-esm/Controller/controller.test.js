@@ -6,9 +6,9 @@ test("Controller.listen&talk.Global", () => {
     const subscribed_namespace = "subscribed/namespace";
     const data = "data";
     const listen = new Promise((resolve) => {
-        c.subscribe(subscribed_namespace, C_StartupTalk.send_Archive, (transmission) => {
+        c.subscribe(C_StartupTalk.send_Archive, (transmission) => {
             resolve(transmission.Talk[2][0]);
-        });
+        }, subscribed_namespace);
     });
     c.announce(subscribed_namespace, [...C_StartupTalk.send_Archive, [data]]);
     return expect(listen).resolves.toBe(data);

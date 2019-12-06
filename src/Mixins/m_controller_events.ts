@@ -316,9 +316,9 @@ export abstract class M_ControllerEvents {
         if (this._subscriptions) {
             this._subscriptions.forEach((subscription: t_subscription) => {
                 this.get_Controller().subscribe(
-                    subscription.Namespace,
                     subscription.Listen,
                     subscription.Call,
+                    subscription.Namespace,
                     subscription.Scope,
                 );
             });

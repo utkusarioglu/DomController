@@ -26,7 +26,7 @@ export declare class Controller extends SeparatorHandler {
     announce(recipient_namespace: t_namespace, talk: t_ri0, scope?: t_scope, delay?: boolean | t_epoch): this;
     private static is_StaticResponder;
     get_AnnouncementArchive(scope: t_singleScope): object[];
-    subscribe(subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void, scope?: t_scope): this;
+    subscribe(listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;
     wait(recipient_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, test_callback: ((transmission: t_transmission) => boolean) | undefined, action_callback: ((transmission: t_transmission) => void) | undefined, scope: t_singleScope, count?: number, current_count?: number): Promise<any>;
     wait_Some(wait_set: t_waitSet[], scope: t_singleScope): Promise<any>;
     set_LocalNamespace(local_namespace: t_namespace): this;

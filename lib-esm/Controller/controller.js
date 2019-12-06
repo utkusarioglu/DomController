@@ -96,9 +96,9 @@ export class Controller extends SeparatorHandler {
     get_AnnouncementArchive(scope) {
         return this.get_Scopes(scope)[0].get_AnnouncementArchive();
     }
-    subscribe(subcribed_namespace, listen, callback, scope = e_Scope.Global) {
+    subscribe(listen, callback, subcribed_namespace = this.get_GlobalNamespace(), scope = e_Scope.Global) {
         this.get_Scopes(scope).forEach((active_scope) => {
-            active_scope.subscribe(subcribed_namespace, listen, callback, scope);
+            active_scope.subscribe(listen, callback, subcribed_namespace, scope);
         });
         return this;
     }

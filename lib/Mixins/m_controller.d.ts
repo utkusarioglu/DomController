@@ -5,6 +5,6 @@ export interface M_Controller extends M_Namespace {
 }
 export declare abstract class M_Controller {
     private _controller;
-    protected set_Controller(): void;
+    protected set_Controller(): this;
     protected get_Controller(): Controller;
 }

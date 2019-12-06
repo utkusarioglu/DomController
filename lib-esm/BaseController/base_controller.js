@@ -126,7 +126,7 @@ export class BaseController extends SeparatorHandler {
             Time: (new Date()).getTime(),
         });
     }
-    subscribe(subcribed_namespace, listen, callback, scope) {
+    subscribe(listen, callback, subcribed_namespace, scope) {
         const expression_trail = Resolution.extract_ExpressionTrail(listen);
         const channel = subcribed_namespace +
             this.get_Separator("Monologue") +

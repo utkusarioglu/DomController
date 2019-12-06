@@ -12,11 +12,11 @@ test("Controller.listen&talk.Global", () => {
 
     const listen = new Promise((resolve) => {
         c.subscribe(
-            subscribed_namespace,
             C_StartupTalk.send_Archive,
             (transmission: t_transmission) => {
                 resolve((transmission.Talk as t_resolutionInstruction)[2][0]);
             },
+            subscribed_namespace,
             //e_Scope.Global,
         );
     });

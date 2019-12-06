@@ -61,11 +61,11 @@ test("App.initialize_Controller", () => {
 
     const subscription = new Promise((resolve) => {
         controller.subscribe(
-            C_Controller.AllServices,
             C_BootState.ClassReady,
             (transmission: t_transmission) => {
                 resolve(transmission.Talk)
             },
+            C_Controller.AllServices,
             e_Scope.Global,
         )
     });
@@ -118,11 +118,11 @@ test("Child.announce", () => {
     const controller = new Controller("Observer");
     const response = new Promise((resolve) => {
         controller.subscribe(
-            C_Controller.AllServices,
             C_BootState.ClassReady,
             (transmission: t_transmission) => {
                 resolve(transmission.Talk);
             },
+            C_Controller.AllServices,
             e_Scope.Global,
         );
     });

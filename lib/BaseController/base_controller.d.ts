@@ -18,7 +18,7 @@ export declare class BaseController extends SeparatorHandler {
     announce(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_resolutionInstruction, scope: t_singleScope, delay?: boolean | t_epoch): void;
     get_AnnouncementArchive(): object[];
     private archive_Announcement;
-    subscribe(subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void, scope: t_singleScope): void;
+    subscribe(listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void, subcribed_namespace: t_namespace, scope: t_singleScope): void;
     wait(waiter_namespace: t_namespace, recipient_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, test_callback: ((transmission: t_transmission) => boolean) | undefined, action_callback: ((transmission: t_transmission) => any) | undefined, scope: t_singleScope, total_count?: number, current_count?: number): Promise<any>;
     wait_Some(scope: t_singleScope, waiter_namespace: t_namespace, wait_set: t_waitSet[]): Promise<t_transmission[]>;
 }

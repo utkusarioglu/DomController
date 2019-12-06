@@ -31,7 +31,7 @@ declare module '@utkusarioglu/dom-controller/Controller/controller' {
         static force_AllDynamicService(): void;
         announce(recipient_namespace: t_namespace, talk: t_ri0, scope?: t_scope, delay?: boolean | t_epoch): this;
         get_AnnouncementArchive(scope: t_singleScope): object[];
-        subscribe(subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void, scope?: t_scope): this;
+        subscribe(listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;
         wait(recipient_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, test_callback: ((transmission: t_transmission) => boolean) | undefined, action_callback: ((transmission: t_transmission) => void) | undefined, scope: t_singleScope, count?: number, current_count?: number): Promise<any>;
         wait_Some(wait_set: t_waitSet[], scope: t_singleScope): Promise<any>;
         set_LocalNamespace(local_namespace: t_namespace): this;
@@ -50,7 +50,7 @@ declare module '@utkusarioglu/dom-controller/Mixins/m_controller' {
     export interface M_Controller extends M_Namespace {
     }
     export abstract class M_Controller {
-        protected set_Controller(): void;
+        protected set_Controller(): this;
         protected get_Controller(): Controller;
     }
 }
@@ -238,7 +238,7 @@ declare module '@utkusarioglu/dom-controller/BaseController/base_controller' {
         publicget_ServedChannels(): string[];
         announce(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_resolutionInstruction, scope: t_singleScope, delay?: boolean | t_epoch): void;
         get_AnnouncementArchive(): object[];
-        subscribe(subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void, scope: t_singleScope): void;
+        subscribe(listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void, subcribed_namespace: t_namespace, scope: t_singleScope): void;
         wait(waiter_namespace: t_namespace, recipient_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, test_callback: ((transmission: t_transmission) => boolean) | undefined, action_callback: ((transmission: t_transmission) => any) | undefined, scope: t_singleScope, total_count?: number, current_count?: number): Promise<any>;
         wait_Some(scope: t_singleScope, waiter_namespace: t_namespace, wait_set: t_waitSet[]): Promise<t_transmission[]>;
     }
