@@ -23,15 +23,15 @@ declare module '@utkusarioglu/dom-controller/Controller/controller' {
         constructor(namespace: t_namespace);
         static flush_GlobalController(): void;
         request<T>(responding_namespace: t_namespace, talk: t_ri0, scope?: t_singleScope, group?: e_ServiceGroup): Promise<i_Response<T>>;
-        respond(response_func: (transmission: i_Request) => Promise<any>, is_static?: boolean, scope?: t_scope, group?: e_ServiceGroup): void;
+        respond(response_func: (transmission: i_Request) => Promise<any>, is_static?: boolean, scope?: t_scope, group?: e_ServiceGroup): this;
         get_DialogueArchive(scope: t_singleScope): object;
         static get_AllStaticChannels(): t_namespace[];
         static get_AllStaticContent(): i_staticContentArchive;
         static flush_StaticContentArchive(): void;
         static force_AllDynamicService(): void;
-        announce(recipient_namespace: t_namespace, talk: t_ri0, scope?: t_scope, delay?: boolean | t_epoch): void;
+        announce(recipient_namespace: t_namespace, talk: t_ri0, scope?: t_scope, delay?: boolean | t_epoch): this;
         get_AnnouncementArchive(scope: t_singleScope): object[];
-        subscribe(subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void, scope?: t_scope): void;
+        subscribe(subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void, scope?: t_scope): this;
         wait(recipient_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, test_callback: ((transmission: t_transmission) => boolean) | undefined, action_callback: ((transmission: t_transmission) => void) | undefined, scope: t_singleScope, count?: number, current_count?: number): Promise<any>;
         wait_Some(wait_set: t_waitSet[], scope: t_singleScope): Promise<any>;
         set_LocalNamespace(local_namespace: t_namespace): this;

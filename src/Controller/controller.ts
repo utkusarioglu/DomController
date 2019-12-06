@@ -292,7 +292,7 @@ export class Controller extends SeparatorHandler {
         is_static: boolean = true,
         scope: t_scope = e_Scope.Global,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
-    ): void {
+    ): this {
 
         if (is_static) {
             Controller._static_responders.push(
@@ -310,6 +310,8 @@ export class Controller extends SeparatorHandler {
                 group,
             );
         });
+
+        return this;
     }
 
 
@@ -471,7 +473,7 @@ export class Controller extends SeparatorHandler {
         talk: t_ri0,
         scope: t_scope = e_Scope.Global,
         delay: boolean | t_epoch = false,
-    ): void {
+    ): this {
 
         this.get_Scopes(scope).forEach((active_scope: BaseController) => {
             active_scope.announce(
@@ -482,6 +484,8 @@ export class Controller extends SeparatorHandler {
                 delay,
             );
         });
+
+        return this;
     }
 
 
@@ -538,7 +542,7 @@ export class Controller extends SeparatorHandler {
         listen: t_resolutionInstructionNoArgs,
         callback: (transmission: i_talk<any>) => void,
         scope: t_scope = e_Scope.Global,
-    ): void {
+    ): this {
 
         this.get_Scopes(scope).forEach((active_scope: BaseController) => {
             active_scope.subscribe(
@@ -548,6 +552,8 @@ export class Controller extends SeparatorHandler {
                 scope as t_singleScope,
             );
         });
+
+        return this;
     }
      
     /**
