@@ -42,7 +42,7 @@ declare module '@utkusarioglu/dom-controller/Controller/controller' {
         get_LocalNamespaces(): t_namespace[];
         set_GlobalNamespace(global_namespace: t_namespace): this;
         get_GlobalNamespace(): t_namespace;
-        get_GlobalNamespaces(): t_namespace[];
+        static get_GlobalNamespaces(): t_namespace[];
         static get_LocalControllerStack(): t_localControllerStack;
     }
 }

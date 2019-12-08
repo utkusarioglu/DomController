@@ -45,6 +45,7 @@
     <Folder Include="src\Common\" />
     <Folder Include="src\Controller\" />
     <Folder Include="src\Mixins\" />
+    <Folder Include="src\TestSupport\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="src\BaseController\base_controller.test.ts" />
@@ -59,6 +60,15 @@
     <TypeScriptCompile Include="src\Mixins\m_controller.ts" />
     <TypeScriptCompile Include="src\Mixins\m_controller_events.test.ts" />
     <TypeScriptCompile Include="src\Mixins\m_controller_events.ts" />
+    <TypeScriptCompile Include="src\TestSupport\base_test_class.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\TestSupport\sample_controller_class.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\TestSupport\sample_controller_events_class.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>

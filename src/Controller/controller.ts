@@ -129,15 +129,11 @@ export class Controller extends SeparatorHandler {
      */
     constructor(namespace: t_namespace) {
         super();
-
         this.set_GlobalNamespace(namespace);
         Controller._global_controller = new BaseController(
             e_Scope.Global,
-            Controller.get_EventEmitter()
+            this.get_EventEmitter()
         );
-
-
-        return this;
     }
 
     /**
@@ -150,7 +146,7 @@ export class Controller extends SeparatorHandler {
     public static flush_GlobalController(): void {
         Controller._global_controller = new BaseController(
             e_Scope.Global,
-            Controller.get_EventEmitter()
+            this.get_EventEmitter()
         );
         Controller.flush_GlobalNamespaces();
     }
@@ -765,7 +761,10 @@ export class Controller extends SeparatorHandler {
                     // console.warn(`${local_namespace} already exists`)
                 },
                 () => {
-                    return new BaseController(e_Scope.Local, Controller.get_EventEmitter());
+                    return new BaseController(
+                        e_Scope.Local,
+                        Controller.get_EventEmitter()
+                    );
                 },
             );
         // Controller._local_controllers[local_namespace] = 
@@ -807,7 +806,7 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public get_GlobalNamespaces(): t_namespace[] {
+    public static get_GlobalNamespaces(): t_namespace[] {
         return Controller._global_namespaces;
     }
 

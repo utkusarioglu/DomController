@@ -7,11 +7,10 @@ export class Controller extends SeparatorHandler {
     constructor(namespace) {
         super();
         this.set_GlobalNamespace(namespace);
-        Controller._global_controller = new BaseController(e_Scope.Global, Controller.get_EventEmitter());
-        return this;
+        Controller._global_controller = new BaseController(e_Scope.Global, this.get_EventEmitter());
     }
     static flush_GlobalController() {
-        Controller._global_controller = new BaseController(e_Scope.Global, Controller.get_EventEmitter());
+        Controller._global_controller = new BaseController(e_Scope.Global, this.get_EventEmitter());
         Controller.flush_GlobalNamespaces();
     }
     static set_EventEmitter(event_emitter) {
@@ -153,7 +152,7 @@ export class Controller extends SeparatorHandler {
     add_Controller_ToGlobalNamespaces(global_namespace) {
         Controller._global_namespaces.push(global_namespace);
     }
-    get_GlobalNamespaces() {
+    static get_GlobalNamespaces() {
         return Controller._global_namespaces;
     }
     static flush_GlobalNamespaces() {

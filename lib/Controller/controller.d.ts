@@ -41,7 +41,7 @@ export declare class Controller extends SeparatorHandler {
     private create_LocalNamespace;
     private destroy_LocalNamespace;
     private add_Controller_ToGlobalNamespaces;
-    get_GlobalNamespaces(): t_namespace[];
+    static get_GlobalNamespaces(): t_namespace[];
     private static flush_GlobalNamespaces;
     private get_Scopes;
     static get_LocalControllerStack(): t_localControllerStack;

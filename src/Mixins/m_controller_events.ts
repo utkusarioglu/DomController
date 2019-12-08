@@ -280,7 +280,7 @@ export abstract class M_ControllerEvents {
                     e_Scope.Global,
                 );
 
-            //this.announce_ToAllServices(C_BootState.ClassReady, 200)
+            this.announce_ToAllServices(C_BootState.ClassReady, 200)
 
         } else {
 
@@ -288,10 +288,10 @@ export abstract class M_ControllerEvents {
             this.register_Subscriptions();
             this.register_Announcements();
             this.register_Services();
+            this.announce_ToAllServices(C_BootState.ClassReady, 200)
 
         }
 
-        this.announce_ToAllServices(C_BootState.ClassReady, 200)
 
         return this;
     }
@@ -558,6 +558,7 @@ export abstract class M_ControllerEvents {
         resolution_instruction: t_resolutionInstruction,
         delay: t_epoch = 0,
     ): void {
+
         this.get_Controller().announce(
             C_Controller.AllServices,
             resolution_instruction,
