@@ -17,6 +17,7 @@ import {
 import { Controller } from "../Controller/controller";
 import { t_trackRecord } from "@utkusarioglu/state/t_state";
 import { M_Controller } from "./m_controller";
+import { EventEmitter } from "@utkusarioglu/event-emitter";
 
 
 
@@ -28,6 +29,8 @@ import { M_Controller } from "./m_controller";
  *	DOMESTICS
  *
  * ///////////////////////////////////////////////////////////////////////// */
+
+Controller.set_EventEmitter(EventEmitter)
 
 test("App.initialize_Controller", () => {
 
@@ -66,7 +69,6 @@ test("App.initialize_Controller", () => {
                 resolve(transmission.Talk)
             },
             C_Controller.AllServices,
-            e_Scope.Global,
         )
     });
 
@@ -77,61 +79,61 @@ test("App.initialize_Controller", () => {
 });
 
 
-test("Child.announce", () => {
+//test("Child.announce", () => {
 
-    const child_class_exp1 = class extends Parent().with(
-        M_Controller,
-        M_ControllerEvents
-    ) {
+//    const child_class_exp1 = class extends Parent().with(
+//        M_Controller,
+//        M_ControllerEvents
+//    ) {
 
-        constructor() {
-            super();
-            this.set_ControllerEvents();
+//        constructor() {
+//            super();
+//            this.set_ControllerEvents();
 
-        }
+//        }
 
-        get_GlobalNamespace(): string {
-            return "Child/Class/1"
-        }
+//        get_GlobalNamespace(): string {
+//            return "Child/Class/1"
+//        }
 
-        has_LocalNamespace(): boolean {
-            return false;
-        }
+//        has_LocalNamespace(): boolean {
+//            return false;
+//        }
 
-        private set_ControllerEvents(): void {
-            this
-                .initialize_Controller();
-            //this.announce_ListenReady();
-        }
+//        private set_ControllerEvents(): void {
+//            this
+//                .initialize_Controller();
+//            //this.announce_ListenReady();
+//        }
 
-        private announce_ListenReady() {
-            this.get_Controller().announce(
-                C_Controller.AllServices,
-                C_BootState.ListenReady,
-                e_Scope.Global,
-                3000
-            )
-        }
+//        private announce_ListenReady() {
+//            this.get_Controller().announce(
+//                C_Controller.AllServices,
+//                C_BootState.ListenReady,
+//                e_Scope.Global,
+//                3000
+//            )
+//        }
 
-    }
+//    }
 
-    const controller = new Controller("Observer");
-    const response = new Promise((resolve) => {
-        controller.subscribe(
-            C_BootState.ClassReady,
-            (transmission: t_transmission) => {
-                resolve(transmission.Talk);
-            },
-            C_Controller.AllServices,
-            e_Scope.Global,
-        );
-    });
+//    const controller = new Controller("Observer");
+//    const response = new Promise((resolve) => {
+//        controller.subscribe(
+//            C_BootState.ClassReady,
+//            (transmission: t_transmission) => {
+//                resolve(transmission.Talk);
+//            },
+//            C_Controller.AllServices,
+//            e_Scope.Global,
+//        );
+//    });
 
-    const child1 = (new child_class_exp1());
+//    const child1 = (new child_class_exp1());
 
-    return expect(response).resolves.toBe(C_BootState.ClassReady);
+//    return expect(response).resolves.toBe(C_BootState.ClassReady);
 
-});
+//});
 
 
 

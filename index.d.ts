@@ -22,6 +22,9 @@ declare module '@utkusarioglu/dom-controller/Controller/controller' {
     export class Controller extends SeparatorHandler {
         constructor(namespace: t_namespace);
         static flush_GlobalController(): void;
+        static set_EventEmitter(event_emitter: Object): void;
+        static get_EventEmitter(): Object;
+        get_EventEmitter(): any;
         request<T>(responding_namespace: t_namespace, talk: t_ri0, scope?: t_singleScope, group?: e_ServiceGroup): Promise<i_Response<T>>;
         respond(response_func: (transmission: i_Request) => Promise<any>, is_static?: boolean, scope?: t_scope, group?: e_ServiceGroup): this;
         get_DialogueArchive(scope: t_singleScope): object;
@@ -231,11 +234,11 @@ declare module '@utkusarioglu/dom-controller/BaseController/base_controller' {
     import { t_resolutionInstruction, t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
     import { t_namespace } from "@utkusarioglu/namespace";
     export class BaseController extends SeparatorHandler {
-        constructor(controller_scope: t_singleScope);
+        constructor(controller_scope: t_singleScope, event_emitter: any);
         request(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_resolutionInstruction, scope: e_Scope, group: e_ServiceGroup): Promise<any>;
         respond(responder_namespace: t_namespace, response_callback: (transmission: i_Request) => Promise<any>, scope: e_Scope, group: e_ServiceGroup): void;
         get_DialogueArchive(): object[];
-        publicget_ServedChannels(): string[];
+        publicget_ServedChannels(): any;
         announce(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_resolutionInstruction, scope: t_singleScope, delay?: boolean | t_epoch): void;
         get_AnnouncementArchive(): object[];
         subscribe(listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void, subcribed_namespace: t_namespace, scope: t_singleScope): void;

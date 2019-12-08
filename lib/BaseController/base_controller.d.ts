@@ -3,18 +3,19 @@ import { t_waitSet, t_transmission, e_ServiceGroup, e_Scope, t_singleScope, t_ep
 import { t_resolutionInstruction, t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
 import { t_namespace } from "@utkusarioglu/namespace";
 export declare class BaseController extends SeparatorHandler {
+    private _event_emitter;
     private _monologue_emitter;
     private _dialogue_emitter;
     private _announcement_archive;
     private _dialogue_archive;
     private _controller_scope;
-    constructor(controller_scope: t_singleScope);
+    constructor(controller_scope: t_singleScope, event_emitter: any);
     request(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_resolutionInstruction, scope: e_Scope, group: e_ServiceGroup): Promise<any>;
     respond(responder_namespace: t_namespace, response_callback: (transmission: i_Request) => Promise<any>, scope: e_Scope, group: e_ServiceGroup): void;
     private archive_Dialogue;
     private static create_RandomServiceId;
     get_DialogueArchive(): object[];
-    publicget_ServedChannels(): string[];
+    publicget_ServedChannels(): any;
     announce(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_resolutionInstruction, scope: t_singleScope, delay?: boolean | t_epoch): void;
     get_AnnouncementArchive(): object[];
     private archive_Announcement;

@@ -4,6 +4,7 @@ import { t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
 import { t_scope, t_singleScope, t_waitSet, t_transmission, e_ServiceGroup, i_staticContentArchive, t_localControllerStack, t_epoch, i_talk, i_Request, i_Response } from "../Common/t_controller";
 import { t_namespace } from "@utkusarioglu/namespace";
 export declare class Controller extends SeparatorHandler {
+    private static _event_emitter_class;
     private static _global_controller;
     private static _local_controllers;
     private static _global_namespaces;
@@ -14,6 +15,9 @@ export declare class Controller extends SeparatorHandler {
     private static _forced_dynamic_service;
     constructor(namespace: t_namespace);
     static flush_GlobalController(): void;
+    static set_EventEmitter(event_emitter: Object): void;
+    static get_EventEmitter(): Object;
+    get_EventEmitter(): any;
     request<T>(responding_namespace: t_namespace, talk: t_ri0, scope?: t_singleScope, group?: e_ServiceGroup): Promise<i_Response<T>>;
     private request_DynamicTransmission;
     respond(response_func: (transmission: i_Request) => Promise<any>, is_static?: boolean, scope?: t_scope, group?: e_ServiceGroup): this;

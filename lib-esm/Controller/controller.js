@@ -7,11 +7,21 @@ export class Controller extends SeparatorHandler {
     constructor(namespace) {
         super();
         this.set_GlobalNamespace(namespace);
+        Controller._global_controller = new BaseController(e_Scope.Global, Controller.get_EventEmitter());
         return this;
     }
     static flush_GlobalController() {
-        Controller._global_controller = new BaseController(e_Scope.Global);
+        Controller._global_controller = new BaseController(e_Scope.Global, Controller.get_EventEmitter());
         Controller.flush_GlobalNamespaces();
+    }
+    static set_EventEmitter(event_emitter) {
+        Controller._event_emitter_class = event_emitter;
+    }
+    static get_EventEmitter() {
+        return Controller._event_emitter_class;
+    }
+    get_EventEmitter() {
+        return Controller._event_emitter_class;
     }
     request(responding_namespace, talk, scope = e_Scope.Global, group = e_ServiceGroup.Standard) {
         const responding_channel = responding_namespace +
@@ -134,7 +144,7 @@ export class Controller extends SeparatorHandler {
         Controller._local_controllers
             .pave([local_namespace], () => {
         }, () => {
-            return new BaseController(e_Scope.Local);
+            return new BaseController(e_Scope.Local, Controller.get_EventEmitter());
         });
     }
     destroy_LocalNamespace(local_namespace) {
@@ -169,7 +179,6 @@ export class Controller extends SeparatorHandler {
         return Controller._local_controllers;
     }
 }
-Controller._global_controller = new BaseController(e_Scope.Global);
 Controller._local_controllers = {};
 Controller._global_namespaces = [];
 Controller._static_content_archive = {};

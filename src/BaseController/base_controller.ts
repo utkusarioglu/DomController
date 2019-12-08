@@ -2,7 +2,7 @@
 /*
  *	COMMON CLASSES
  */ 
-import { EventEmitter } from "@utkusarioglu/event-emitter";
+//import { EventEmitter } from "@utkusarioglu/event-emitter";
 import { Resolution, t_ri0 } from "@utkusarioglu/resolver";
 import { SeparatorHandler } from "../Common/separator_handler";
 /*
@@ -52,15 +52,20 @@ export class BaseController extends SeparatorHandler {
  * ============================================================================
  */
 
-    /** 
+    /**
+     * Stores the event emitter class for the basecontroller to instasntiate
+     */
+    private _event_emitter!: any;
+
+    /**
      *  Event emitter for talk and listen use cases
      */
-    private _monologue_emitter = new EventEmitter().setMaxListeners(20); // this increase may have some speed cost
+    private _monologue_emitter!: any; // this increase may have some speed cost
 
     /**
      *  Event emitter for services
      */
-    private _dialogue_emitter = new EventEmitter().setMaxListeners(20); // this increase may have some speed cost;
+    private _dialogue_emitter!: any; // this increase may have some speed cost;
 
     /**
      *  Stores runtime announcements
@@ -93,14 +98,23 @@ export class BaseController extends SeparatorHandler {
      * using this class
      * 
      * @param controller_scope
+     * @param event_emitter
      * 
      * @remarks
      * Class: Basecontroller
      * Service: Controller
      */
-    constructor(controller_scope: t_singleScope) {
+    constructor(
+        controller_scope: t_singleScope,
+        event_emitter: any
+    ) {
         super();
         this._controller_scope = controller_scope;
+
+        this._event_emitter = event_emitter
+        this._monologue_emitter = new event_emitter().setMaxListeners(20);
+        this._dialogue_emitter = new event_emitter().setMaxListeners(20);
+
     }
 
 

@@ -63,7 +63,6 @@ export class M_ControllerEvents {
                 this.register_Services();
                 this.announce_ToAllServices(C_BootState.TalkReady);
             }, e_Scope.Global);
-            this.announce_ToAllServices(C_BootState.ClassReady, 200);
         }
         else {
             this.register_Dependencies();
@@ -71,6 +70,7 @@ export class M_ControllerEvents {
             this.register_Announcements();
             this.register_Services();
         }
+        this.announce_ToAllServices(C_BootState.ClassReady, 200);
         return this;
     }
     register_Subscriptions() {

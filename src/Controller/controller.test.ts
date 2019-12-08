@@ -1,7 +1,45 @@
+
+/* ////////////////////////////////////////////////////////////////////////////
+ *
+ *	IMPORTS
+ *
+ * ///////////////////////////////////////////////////////////////////////// */
+
+/*
+ *	DEPENDENCIES
+ */
+import { EventEmitter } from "@utkusarioglu/event-emitter";
+
+/*
+ *	LOCALS
+ */
 import { Controller } from "./controller";
+
+/*
+ *	CONSTANTS
+ */
 import { C_StartupTalk } from "../Common/c_controller";
-import { t_transmission, e_Scope } from "../Common/t_controller";
-import { t_resolutionInstruction } from "@utkusarioglu/resolver";
+
+/*
+ *	DATATYPES
+ */
+import { t_transmission, e_Scope, i_talk } from "../Common/t_controller";
+import { t_resolutionInstruction, Resolution, t_ri0 } from "@utkusarioglu/resolver";
+
+
+
+
+
+
+/* ////////////////////////////////////////////////////////////////////////////
+ *
+ *	DOMESTICS
+ *
+ * ///////////////////////////////////////////////////////////////////////// */
+
+Controller.set_EventEmitter(EventEmitter);
+
+
 
 test("Controller.listen&talk.Global", () => {
 
@@ -13,8 +51,8 @@ test("Controller.listen&talk.Global", () => {
     const listen = new Promise((resolve) => {
         c.subscribe(
             C_StartupTalk.send_Archive,
-            (transmission: t_transmission) => {
-                resolve((transmission.Talk as t_resolutionInstruction)[2][0]);
+            (transmission: i_talk<t_ri0>) => {
+                resolve((Resolution.extract_Argument(transmission.Talk)));
             },
             subscribed_namespace,
             //e_Scope.Global,

@@ -72,10 +72,15 @@ export class Controller extends SeparatorHandler {
  * ============================================================================
  */
 
+    /**
+     * Stores the event emitter for Basecontroller
+     */
+    private static _event_emitter_class: Object;
+
     /** 
      *  Provides BaseController functionality for global scope
      */
-    private static _global_controller = new BaseController(e_Scope.Global);
+    private static _global_controller: BaseController;
 
     /** 
      *  Provides BaseContoller functionality for local scopes
@@ -113,6 +118,7 @@ export class Controller extends SeparatorHandler {
      */
     private static _forced_dynamic_service: boolean = false;
 
+
     /**
      * Establishes local and global event emitters,
      * Stores the history of exchanges
@@ -125,6 +131,11 @@ export class Controller extends SeparatorHandler {
         super();
 
         this.set_GlobalNamespace(namespace);
+        Controller._global_controller = new BaseController(
+            e_Scope.Global,
+            Controller.get_EventEmitter()
+        );
+
 
         return this;
     }
@@ -137,10 +148,45 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     public static flush_GlobalController(): void {
-        Controller._global_controller = new BaseController(e_Scope.Global);
+        Controller._global_controller = new BaseController(
+            e_Scope.Global,
+            Controller.get_EventEmitter()
+        );
         Controller.flush_GlobalNamespaces();
     }
 
+
+/*
+ * ======================================================= Boundary 1 =========
+ *
+ *	DECLARATION
+ *
+ * ============================================================================
+ */
+
+    /**
+     * Sets the event emitter class to be used with controller
+     * default is nodeJs event emitter
+     * 
+     * @param event_emitter
+     */
+    public static set_EventEmitter(event_emitter: Object): void {
+        Controller._event_emitter_class = event_emitter;
+    }
+
+    /**
+     * Returns the event emitter - Static
+     */
+    public static get_EventEmitter(): Object {
+        return Controller._event_emitter_class;
+    }
+
+    /**
+     * Returns the event emitter - NonStatic
+     */
+    public get_EventEmitter(): any {
+        return Controller._event_emitter_class;
+    }
 
 /*
  * ======================================================= Boundary 1 =========
@@ -719,7 +765,7 @@ export class Controller extends SeparatorHandler {
                     // console.warn(`${local_namespace} already exists`)
                 },
                 () => {
-                    return new BaseController(e_Scope.Local);
+                    return new BaseController(e_Scope.Local, Controller.get_EventEmitter());
                 },
             );
         // Controller._local_controllers[local_namespace] = 

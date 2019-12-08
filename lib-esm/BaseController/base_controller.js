@@ -1,15 +1,15 @@
-import { EventEmitter } from "@utkusarioglu/event-emitter";
 import { Resolution } from "@utkusarioglu/resolver";
 import { SeparatorHandler } from "../Common/separator_handler";
 import { C_Controller } from "../Common/c_controller";
 export class BaseController extends SeparatorHandler {
-    constructor(controller_scope) {
+    constructor(controller_scope, event_emitter) {
         super();
-        this._monologue_emitter = new EventEmitter().setMaxListeners(20);
-        this._dialogue_emitter = new EventEmitter().setMaxListeners(20);
         this._announcement_archive = [];
         this._dialogue_archive = [];
         this._controller_scope = controller_scope;
+        this._event_emitter = event_emitter;
+        this._monologue_emitter = new event_emitter().setMaxListeners(20);
+        this._dialogue_emitter = new event_emitter().setMaxListeners(20);
     }
     request(sender_namespace, recipient_namespace, talk, scope, group) {
         const service_id = BaseController.create_RandomServiceId();

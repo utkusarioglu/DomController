@@ -1,5 +1,8 @@
+import { EventEmitter } from "@utkusarioglu/event-emitter";
 import { Controller } from "./controller";
 import { C_StartupTalk } from "../Common/c_controller";
+import { Resolution } from "@utkusarioglu/resolver";
+Controller.set_EventEmitter(EventEmitter);
 test("Controller.listen&talk.Global", () => {
     const namespace = "namespace";
     const c = new Controller(namespace);
@@ -7,7 +10,7 @@ test("Controller.listen&talk.Global", () => {
     const data = "data";
     const listen = new Promise((resolve) => {
         c.subscribe(C_StartupTalk.send_Archive, (transmission) => {
-            resolve(transmission.Talk[2][0]);
+            resolve((Resolution.extract_Argument(transmission.Talk)));
         }, subscribed_namespace);
     });
     c.announce(subscribed_namespace, [...C_StartupTalk.send_Archive, [data]]);

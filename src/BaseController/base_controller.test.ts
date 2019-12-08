@@ -51,7 +51,7 @@ test("EventEmitter", () => {
 test("BaseController.subscribe&announce.Global", () => {
 
     const namespace = "subscribed/namespace";
-    const base_controller = new BaseController(e_Scope.Global);
+    const base_controller = new BaseController(e_Scope.Global, EventEmitter);
 
     const subscription = new Promise((resolve, reject) => {
         base_controller.subscribe(
@@ -80,7 +80,7 @@ test("BaseController.subscribe&announce.Global", () => {
 test("BaseController.subscribe&announce.Local", () => {
 
     const namespace = "subscribed/namespace";
-    const base_controller = new BaseController(e_Scope.Local);
+    const base_controller = new BaseController(e_Scope.Local, EventEmitter);
 
     const subscription = new Promise((resolve, reject) => {
         base_controller.subscribe(
@@ -109,7 +109,7 @@ test("BaseController.subscribe&announce.Local", () => {
 test("BaseController.wait", () => {
 
     const declaration_namespace = "declaration/namespace";
-    const base_controller = new BaseController(e_Scope.Local);
+    const base_controller = new BaseController(e_Scope.Local, EventEmitter);
     const test_value = "test-value";
     let announcement_count: number = 0;
 
@@ -160,7 +160,7 @@ test("BaseController.wait", () => {
 
 test("BaseController.wait_Some", () => {
 
-    const base_controller = new BaseController(e_Scope.Global);
+    const base_controller = new BaseController(e_Scope.Global, EventEmitter);
 
     const declaration_namespace1 = "declaration/namespace/1";
     const declaration_namespace2 = "declaration/namespace/2";
@@ -228,7 +228,7 @@ test("BaseController.wait_Some", () => {
 
 test("Basecontroller.service", () => {
 
-    const base_controller = new BaseController(e_Scope.Global);
+    const base_controller = new BaseController(e_Scope.Global, EventEmitter);
     const responder_namespace = "responder/namespace";
     const sender_namespace = "sender/namespace";
 

@@ -280,7 +280,7 @@ export abstract class M_ControllerEvents {
                     e_Scope.Global,
                 );
 
-            this.announce_ToAllServices(C_BootState.ClassReady, 200)
+            //this.announce_ToAllServices(C_BootState.ClassReady, 200)
 
         } else {
 
@@ -291,6 +291,7 @@ export abstract class M_ControllerEvents {
 
         }
 
+        this.announce_ToAllServices(C_BootState.ClassReady, 200)
 
         return this;
     }
