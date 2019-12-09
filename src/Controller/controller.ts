@@ -8,7 +8,7 @@
 /*
  *	DEPENDENCIES
  */
-import { Resolution, t_ri0 } from "@utkusarioglu/resolver";
+import { Resolution, t_ri0, t_ri1, t_ri } from "@utkusarioglu/resolver";
 
 /*
  *	LOCAL CLASSES
@@ -26,23 +26,26 @@ import { C_Controller } from "../Common/c_controller";
  */
 import {
     t_resolutionInstruction,
-    t_resolutionInstructionNoArgs,
     t_instructionCode,
 } from "@utkusarioglu/resolver";
 import {
     t_scope,
     t_singleScope,
-    t_waitSet,
+    i_waitSet,
     t_transmission,
     e_ServiceGroup,
     i_staticContentArchive,
     e_Scope,
-    t_localControllerStack,
+    i_localControllerStack,
     t_channel,
     t_epoch,
     i_talk,
-    i_Request,
-    i_Response,
+    i_request,
+    i_response,
+    i_EventEmitter,
+    t_waitActionCallback,
+    t_waitTestCallback,
+    t_wait,
 } from "../Common/t_controller";
 import { i_map } from "@utkusarioglu/state/t_state"; // This should be removed
 import { t_namespace } from "@utkusarioglu/namespace";
@@ -75,7 +78,7 @@ export class Controller extends SeparatorHandler {
     /**
      * Stores the event emitter for Basecontroller
      */
-    private static _event_emitter_class: Object;
+    private static _event_emitter_class: i_EventEmitter;
 
     /** 
      *  Provides BaseController functionality for global scope
@@ -85,7 +88,7 @@ export class Controller extends SeparatorHandler {
     /** 
      *  Provides BaseContoller functionality for local scopes
      */
-    private static _local_controllers: t_localControllerStack = {};
+    private static _local_controllers: i_localControllerStack = {};
 
     /** 
      *  List of registered classes
@@ -176,21 +179,21 @@ export class Controller extends SeparatorHandler {
      * 
      * @param event_emitter
      */
-    public static set_EventEmitter(event_emitter: Object): void {
+    public static set_EventEmitter(event_emitter: any): void {
         Controller._event_emitter_class = event_emitter;
     }
 
     /**
      * Returns the event emitter - Static
      */
-    public static get_EventEmitter(): Object {
+    public static get_EventEmitter(): i_EventEmitter {
         return Controller._event_emitter_class;
     }
 
     /**
      * Returns the event emitter - NonStatic
      */
-    public get_EventEmitter(): any {
+    public get_EventEmitter(): i_EventEmitter {
         return Controller._event_emitter_class;
     }
 
@@ -221,12 +224,12 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public request<T>(
+    public request<Content = any>(
         responding_namespace: t_namespace,
         talk: t_ri0,
         scope: t_singleScope = e_Scope.Global,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
-    ): Promise<i_Response<T>> {
+    ): Promise<i_response<Content>> {
 
         const responding_channel =
             responding_namespace +
@@ -261,7 +264,7 @@ export class Controller extends SeparatorHandler {
 
                     return dynamic_transmission;
                 },
-                (static_transmisson: i_Response<T>) => {
+                (static_transmisson: i_response<Content>) => {
 
                     console.warn("Serving static content");
 
@@ -272,7 +275,7 @@ export class Controller extends SeparatorHandler {
 
         } else {
 
-            return this.request_DynamicTransmission<T>(
+            return this.request_DynamicTransmission<Content>(
                 responding_namespace,
                 talk,
                 scope,
@@ -294,12 +297,12 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    private request_DynamicTransmission<T>(
+    private request_DynamicTransmission<Content = any>(
         recipient_namespace: t_namespace,
         talk: t_ri0,
         scope: t_singleScope = e_Scope.Global,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
-    ): Promise<i_Response<T>> {
+    ): Promise<i_response<Content>> {
         return this
             .get_Scopes(scope)[0]
             .request(
@@ -323,7 +326,7 @@ export class Controller extends SeparatorHandler {
      * registering responses
      * 
      * @param scope defines local and/or global scope
-     * @param response_func (t_transmission) => Promise that will process the 
+     * @param response_callback (t_transmission) => Promise that will process the 
      * request
      * @param is_static: if true, the created response will be saved for the 
      * controller for 
@@ -337,8 +340,8 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public respond(
-        response_func: (transmission: i_Request) => Promise<any>,
+    public respond<Content = any>(
+        response_callback: (transmission: i_request) => Promise<Content>,
         is_static: boolean = true,
         scope: t_scope = e_Scope.Global,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
@@ -355,7 +358,7 @@ export class Controller extends SeparatorHandler {
         this.get_Scopes(scope).forEach((active_scope: BaseController) => {
             active_scope.respond(
                 this._controller_global_namespace,
-                response_func,
+                response_callback,
                 scope,
                 group,
             );
@@ -516,9 +519,9 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public announce(
+    public announce<TalkArgs = any>(
         recipient_namespace: t_namespace,
-        talk: t_ri0,
+        talk: t_ri1<TalkArgs> | t_ri,
         scope: t_scope = e_Scope.Global,
         delay: boolean | t_epoch = false,
     ): this {
@@ -585,9 +588,9 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public subscribe(
-        listen: t_resolutionInstructionNoArgs,
-        callback: (transmission: i_talk<any>) => void,
+    public subscribe<TalkArgs = any>(
+        listen: t_ri,
+        callback: (transmission: i_talk<TalkArgs>) => void,
         subcribed_namespace: t_namespace = this.get_GlobalNamespace(),
         scope: t_scope = e_Scope.Global,
     ): this {
@@ -625,15 +628,19 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public wait(
+    public wait<
+        TalkArgs = any,
+        Return = i_talk<TalkArgs>
+    >(
         recipient_namespace: t_namespace,
-        listen: t_resolutionInstructionNoArgs,
-        test_callback: (transmission: t_transmission) => boolean = () => true,
-        action_callback: (transmission: t_transmission) => void = () => { },
+        listen: t_ri,
+        test_callback: t_waitTestCallback<TalkArgs> = () => true,
+        action_callback: t_waitActionCallback<TalkArgs, Return> =
+            (transmission) => transmission,
         scope: t_singleScope = e_Scope.Global,
         count: number = 1,
         current_count: number = count,
-    ): Promise<any> {
+    ): Promise<t_wait<TalkArgs, Return>> {
         const wait_response = this.get_Scopes(scope)[0].wait(
             this._controller_global_namespace,
             recipient_namespace,
@@ -658,10 +665,13 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public wait_Some(
-        wait_set: t_waitSet[],
+    public wait_Some<
+        TalkArgs = any,
+        Return = i_talk<TalkArgs>
+    >(
+        wait_set: Array<i_waitSet<TalkArgs, Return>>,
         scope: t_singleScope,
-    ): Promise<any> {
+    ): Promise<Array<t_wait<TalkArgs, Return>>> {
         return this
             .get_Scopes(scope)[0]
             .wait_Some(
@@ -870,7 +880,7 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public static get_LocalControllerStack(): t_localControllerStack {
+    public static get_LocalControllerStack(): i_localControllerStack {
         return Controller._local_controllers;
     }
 }

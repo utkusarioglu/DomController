@@ -2,7 +2,7 @@ import { EventEmitter } from "@utkusarioglu/event-emitter";
 import { t_ri0 } from "@utkusarioglu/resolver";
 import { M_Controller } from "../Mixins/m_controller";
 import { t_namespace } from "@utkusarioglu/namespace";
-import { i_talk, i_Response } from "../Common/t_controller";
+import { i_talk, i_response } from "../Common/t_controller";
 export declare const ActiveEmitter: typeof EventEmitter;
 export declare abstract class BaseTestClass extends M_Controller {
     protected _sample_namespace: string;
@@ -14,6 +14,6 @@ export declare abstract class BaseTestClass extends M_Controller {
     get_ClassEventEmitter(): EventEmitter;
     listen(): Promise<i_talk<t_ri0>>;
     talk(message: any): void;
-    request(channel: t_namespace, message: string): Promise<i_Response<string>>;
+    request(channel: t_namespace, message: string): Promise<i_response<string>>;
     respond(addition: string): void;
 }

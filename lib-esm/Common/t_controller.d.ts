@@ -1,5 +1,5 @@
 import { BaseController } from "../BaseController/base_controller";
-import { t_resolutionInstructionNoArgs, t_resolutionInstruction, t_ri0 } from "@utkusarioglu/resolver";
+import { t_resolutionInstruction, t_ri1, t_ri0, t_ri } from "@utkusarioglu/resolver";
 import { t_namespace } from "@utkusarioglu/namespace";
 export declare type t_epoch = number;
 export declare enum e_Scope {
@@ -9,15 +9,15 @@ export declare enum e_Scope {
 }
 export declare type t_scope = e_Scope;
 export declare type t_singleScope = e_Scope.Local | e_Scope.Global;
-export interface t_error {
+export interface i_error {
 }
 export declare type t_channel = string;
 export declare type t_serviceId = string;
-export interface t_waitSet {
+export interface i_waitSet<TalkArgs, Return> {
     Namespace: t_namespace;
-    Listen: t_resolutionInstructionNoArgs;
-    Test?: (transmission: t_transmission) => boolean;
-    Call?: (transmission: t_transmission) => any;
+    Listen: t_ri;
+    Test?: t_waitTestCallback<TalkArgs>;
+    Call?: t_waitPromiseResponse<TalkArgs, Return>;
 }
 export declare type t_transmissionContent = any;
 export interface t_transmission {
@@ -25,43 +25,43 @@ export interface t_transmission {
     Recipient: t_namespace;
     Channel: t_channel;
     Group?: e_ServiceGroup;
-    Listen?: t_resolutionInstructionNoArgs;
+    Listen?: t_ri;
     Talk?: t_resolutionInstruction;
     Content?: t_transmissionContent;
-    Error?: t_error;
+    Error?: i_error;
     Id?: t_serviceId;
     Time: t_epoch;
     Static: boolean;
     LastDynamicTime?: t_epoch;
     Scope: e_Scope;
 }
-export interface t_dependency_group {
+export interface i_dependency_group<TalkArgs, Return> {
     Scope: t_singleScope;
-    Members: t_waitSet[];
+    Members: i_waitSet<TalkArgs, Return>[];
     Call: (value: any) => Promise<any>;
 }
-export interface t_subscription {
+export interface i_subscription {
     Scope: t_scope;
     Namespace: t_namespace;
-    Listen: t_resolutionInstructionNoArgs;
+    Listen: t_ri;
     Call: (value: any) => any;
 }
-export interface t_service {
+export interface i_service {
     Scope: t_scope;
     Namespace: t_namespace;
-    Listen: t_resolutionInstructionNoArgs;
+    Listen: t_ri;
     Call: (value: any) => any;
     Static?: boolean;
     Group: e_ServiceGroup;
 }
-export interface t_reception {
+export interface i_reception {
     Scope: t_scope;
     Namespace?: t_namespace;
     Talk: t_resolutionInstruction;
-    Listen: t_resolutionInstructionNoArgs;
+    Listen: t_ri;
     Call: (value: any) => any;
 }
-export interface t_announcement {
+export interface i_announcement {
     Scope: t_scope;
     Namespace: t_namespace;
     Talk: any;
@@ -71,47 +71,47 @@ export declare enum e_ServiceGroup {
 }
 export interface i_staticContentArchive {
     [channel: string]: {
-        [unique_request_code: string]: i_Response<any>;
+        [unique_request_code: string]: i_response<any>;
     };
 }
-export interface t_localControllerStack {
+export interface i_localControllerStack {
     [namespace: string]: BaseController;
 }
-export interface t_sequenceStep {
+export interface i_sequenceStep {
     StartMessage?: string;
     EndMessage?: string;
-    Listen: t_resolutionInstructionNoArgs;
+    Listen: t_ri;
     List: t_namespace[];
-    Talk?: t_resolutionInstructionNoArgs;
+    Talk?: t_ri;
 }
 export interface i_map<T> {
     [key: string]: T;
 }
-export interface i_talk<T> {
+export interface i_talk<TalkArgs> {
     Sender: t_namespace;
     Recipient: t_namespace;
     Channel: t_channel;
-    Talk: T;
-    Error?: t_error;
+    Talk: t_ri1<TalkArgs>;
+    Error?: i_error;
     Time: t_epoch;
     Static: boolean;
     Scope: e_Scope;
 }
-export interface i_Response<T> {
+export interface i_response<Content> {
     Sender: t_namespace;
     Recipient: t_namespace;
     Channel: t_channel;
     Group: e_ServiceGroup;
     Talk: t_ri0;
-    Content: T;
-    Error?: t_error;
+    Content: Content;
+    Error?: i_error;
     Id: t_serviceId;
     Time: t_epoch;
     Static: boolean;
     LastDynamicTime?: t_epoch;
     Scope: e_Scope;
 }
-export interface i_Request {
+export interface i_request {
     Channel: t_channel;
     Sender: t_namespace;
     Group: e_ServiceGroup;
@@ -122,3 +122,38 @@ export interface i_Request {
     Static: boolean;
     Scope: e_Scope;
 }
+export interface i_announcementPacket<TalkArgs> {
+    Channel: t_channel;
+    Sender: t_namespace;
+    Recipient: t_namespace;
+    Talk: t_ri1<TalkArgs> | t_ri0;
+    Time: t_epoch;
+    Static: boolean;
+    Scope: e_Scope;
+}
+export interface i_EventEmitter {
+    new (): this;
+    once(channel: t_channel, response: any): void;
+    on(channel: t_channel, packet: any): void;
+    emit(channel: t_channel, packet: any): void;
+    eventNames(): Array<any>;
+    setMaxListeners(listener_count: number): this;
+}
+export interface i_dialogueArchiveItem {
+    Meta: {
+        Elapsed: t_epoch;
+        State: "Fail" | "Success";
+    };
+    Request: i_request;
+    Response: i_response<any>;
+}
+export interface i_announcementArchiveItem {
+    Namespace: t_namespace;
+    Channel: t_channel;
+    Content: any;
+    Time: t_epoch;
+}
+export declare type t_waitActionCallback<TalkArgs, Return = i_talk<TalkArgs>> = (transmission: i_talk<TalkArgs>) => i_talk<TalkArgs> | Return;
+export declare type t_waitTestCallback<TalkArgs> = (transmission: i_talk<TalkArgs>) => boolean;
+export declare type t_waitPromiseResponse<TalkArgs, Return> = (reason: t_wait<TalkArgs, Return> | Promise<t_wait<TalkArgs, Return>>) => t_wait<TalkArgs, Return>;
+export declare type t_wait<TalkArgs, Return> = i_talk<TalkArgs> | Return;

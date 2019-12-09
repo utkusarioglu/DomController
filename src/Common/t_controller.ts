@@ -7,10 +7,10 @@ import { BaseController } from "../BaseController/base_controller";
  *	DATATYPES
  */
 import {
-    t_resolutionInstructionNoArgs,
     t_resolutionInstruction,
     t_ri1,
     t_ri0,
+    t_ri,
 } from "@utkusarioglu/resolver";
 
 import { t_namespace } from "@utkusarioglu/namespace";
@@ -67,8 +67,8 @@ export type t_singleScope = e_Scope.Local | e_Scope.Global;
 /**
  * Contains specifications for the transmission error
  */
-export interface t_error {
-
+export interface i_error {
+    // TODO
 }
 
 
@@ -85,15 +85,15 @@ export type t_serviceId = string;
 /**
  * Stores specifications required for the wait method to run
  */
-export interface t_waitSet {
+export interface i_waitSet<TalkArgs, Return> {
     /** Namespace of the target that is being waited*/
     Namespace: t_namespace;
     /** the resolution to listen to */
-    Listen: t_resolutionInstructionNoArgs;
+    Listen: t_ri;
     /** callback function to determine if the emit from the awaited meets the requirements*/
-    Test?: (transmission: t_transmission) => boolean;
+    Test?: t_waitTestCallback<TalkArgs>;
     /** callback to be executed once the awaited passes the test*/
-    Call?: (transmission: t_transmission) => any;
+    Call?: t_waitPromiseResponse<TalkArgs, Return>;
 }
 
 /**
@@ -121,13 +121,13 @@ export interface t_transmission {
     /** denotes the service group in service transmissions */
     Group?: e_ServiceGroup;
     /** Listening resolution involved with the transmission */
-    Listen?: t_resolutionInstructionNoArgs;
+    Listen?: t_ri;
     /** Talking that is involved with the transmission*/
     Talk?: t_resolutionInstruction;
     /** transmission content that is created by the responder */
     Content?: t_transmissionContent;
     /** Error content if an error occured*/
-    Error?: t_error;
+    Error?: i_error;
     /** Unique request code*/
     Id?: t_serviceId;
     /** epoch when the transmission occured */
@@ -141,11 +141,11 @@ export interface t_transmission {
 /**
  * Datatype for instructing multiple waits followed by a call
  */
-export interface t_dependency_group {
+export interface i_dependency_group<TalkArgs, Return> {
     /** 1: Local, 2 or 10: global, 3 or 11: global + local */
     Scope: t_singleScope;
     /** Dependency members to be waited*/
-    Members: t_waitSet[];
+    Members: i_waitSet<TalkArgs, Return>[];
     /** Callback function to be executed once all the dependencies become available*/
     Call: (value: any) => Promise<any>;
 }
@@ -153,13 +153,13 @@ export interface t_dependency_group {
 /**
  * Datatype for instructing monitor of a channel
  */
-export interface t_subscription {
+export interface i_subscription {
     /** 1: Local, 2 or 10: global, 3 or 11: global + local */
     Scope: t_scope;
     /** The namespace that is being subscribed to*/
     Namespace: t_namespace;
     /** Resolution that is being subscribed at */
-    Listen: t_resolutionInstructionNoArgs;
+    Listen: t_ri;
     /** Callback function to be executed when the subscription emits*/
     Call: (value: any) => any;
 }
@@ -168,13 +168,13 @@ export interface t_subscription {
  * Datatype for instructing monitor of a channel followed by a call whose 
  * return is emitted to the requester
  */
-export interface t_service {
+export interface i_service {
     /** 1: Local, 2 or 10: global, 3 or 11: global + local */
     Scope: t_scope;
     /** Namespace that is expected to respond to the request*/
     Namespace: t_namespace;
     /** Specific method that is being requested*/
-    Listen: t_resolutionInstructionNoArgs;
+    Listen: t_ri;
     /** Callback function to be executed on the response transmission*/
     Call: (value: any) => any;
     /** Whelther the service is static */
@@ -187,7 +187,7 @@ export interface t_service {
  * Datatype for announcing a listening channel to which multiple clases can independently 
  * send data towards, which will independently handled by the call function
  */
-export interface t_reception {
+export interface i_reception {
     /** 1: Local, 2 or 10: global, 3 or 11: global + local */
     Scope: t_scope;
     /** Namespace that is accepting the admissions */
@@ -195,7 +195,7 @@ export interface t_reception {
     /** Announcement resolution */
     Talk: t_resolutionInstruction;
     /** Listening resolution */
-    Listen: t_resolutionInstructionNoArgs;
+    Listen: t_ri;
     /** function that will be called when another node emits to the channel (namespace + . + method) */
     Call: (value: any) => any;
 }
@@ -204,7 +204,7 @@ export interface t_reception {
  * Datatype for instructing emit of data to a certain channel without any 
  * following listening activity by the emitter
  */
-export interface t_announcement {
+export interface i_announcement {
     /** 1: Local, 2 or 10: global, 3 or 11: global + local */
     Scope: t_scope;
     /** Namespace of the announcer*/
@@ -222,14 +222,14 @@ export enum e_ServiceGroup {
  */
 export interface i_staticContentArchive {
     [channel: string]: {
-        [unique_request_code: string]: i_Response<any>,
+        [unique_request_code: string]: i_response<any>,
     };
 }
 
 /**
  * Stores local controllers
  */
-export interface t_localControllerStack {
+export interface i_localControllerStack {
     [namespace: string]: BaseController;
 }
 
@@ -239,19 +239,19 @@ export interface t_localControllerStack {
 /**
  * Defines the properties necessary for executing one step
  */
-export interface t_sequenceStep {
+export interface i_sequenceStep {
     /** Console mesage for the start of the step if enabled */
     StartMessage?: string;
     /** Console mesage for the end of the step if enabled */
     EndMessage?: string;
     /** Instruction to be listened to for determining the services' completion of the step */
-    Listen: t_resolutionInstructionNoArgs;
+    Listen: t_ri;
     /** List of namespaces that are required to complete the step */
     List: t_namespace[];
     /** Instruction to announce to listening services that the step execution is shall 
      * be carried out. Some steps may not require a talk as the execution starts through 
      * some other method */
-    Talk?: t_resolutionInstructionNoArgs;
+    Talk?: t_ri;
 }
 
 /**
@@ -263,7 +263,7 @@ export interface i_map<T> { [key: string]: T; }
 /**
  * Sub set of t_transmission for talk event
  */
-export interface i_talk<T> {
+export interface i_talk<TalkArgs> {
     /** namespace of the sender*/
     Sender: t_namespace;
     /** namespace of the recipient*/
@@ -277,9 +277,9 @@ export interface i_talk<T> {
      */
     Channel: t_channel;
     /** Talking that is involved with the transmission*/
-    Talk: T;
+    Talk: t_ri1<TalkArgs>;
     /** Error content if an error occured*/
-    Error?: t_error;
+    Error?: i_error;
     /** epoch when the transmission occured */
     Time: t_epoch;
     Static: boolean;
@@ -289,7 +289,7 @@ export interface i_talk<T> {
 /**
  * Extends t_transmission for response event 
  */
-export interface i_Response<T> {
+export interface i_response<Content> {
     /** namespace of the sender*/
     Sender: t_namespace;
 
@@ -310,9 +310,9 @@ export interface i_Response<T> {
     /** Talking that is involved with the transmission*/
     Talk: t_ri0;
     /** transmission content that is created by the responder */
-    Content: T;
+    Content: Content;
     /** Error content if an error occured*/
-    Error?: t_error;
+    Error?: i_error;
     /** Unique request code*/
     Id: t_serviceId;
     /** epoch when the transmission occured */
@@ -322,7 +322,7 @@ export interface i_Response<T> {
     Scope: e_Scope;
 }
 
-export interface i_Request {
+export interface i_request {
     Channel: t_channel,
     Sender: t_namespace,
     Group: e_ServiceGroup,
@@ -333,3 +333,66 @@ export interface i_Request {
     Static: boolean,
     Scope: e_Scope,
 }
+
+export interface i_announcementPacket<TalkArgs> {
+    Channel: t_channel,
+    Sender: t_namespace,
+    Recipient: t_namespace,
+    Talk: t_ri1<TalkArgs> | t_ri0,
+    Time: t_epoch,
+    Static: boolean,
+    Scope: e_Scope,
+}
+
+/**
+ * Interface for all event emitters that controller uses
+ */
+export interface i_EventEmitter {
+    new(): this
+    once(channel: t_channel, response: any): void
+    on(channel: t_channel, packet: any): void
+    emit(channel: t_channel, packet: any): void
+    eventNames(): Array<any>;
+    setMaxListeners(listener_count: number): this
+}
+
+/**
+ * Dialogue archive item structure
+ */
+export interface i_dialogueArchiveItem {
+    Meta: {
+        Elapsed: t_epoch,
+        State: "Fail" | "Success",
+    },
+    Request: i_request,
+    Response: i_response<any>,
+}
+
+/**
+ * Annoucement archive item structure
+ */
+export interface i_announcementArchiveItem {
+    Namespace: t_namespace,
+    Channel: t_channel,
+    Content: any,
+    Time: t_epoch,
+}
+
+/**
+ * Alias for wait action callback
+ */
+export type t_waitActionCallback<TalkArgs, Return = i_talk<TalkArgs>> =
+    (transmission: i_talk<TalkArgs>) => i_talk<TalkArgs> | Return;
+
+/**
+ * Alias for wait test callback
+ */
+export type t_waitTestCallback<TalkArgs> = (transmission: i_talk<TalkArgs>) => boolean
+
+/**
+ * Alias for wait promise resolve
+ */
+export type t_waitPromiseResponse<TalkArgs, Return> =
+    (reason: t_wait<TalkArgs, Return> | Promise<t_wait<TalkArgs, Return>>) => t_wait<TalkArgs, Return>
+
+export type t_wait<TalkArgs, Return> = i_talk<TalkArgs> | Return;

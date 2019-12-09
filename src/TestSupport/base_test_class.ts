@@ -10,7 +10,7 @@
  */
 //import { EventEmitter } from "events";
 import { EventEmitter } from "@utkusarioglu/event-emitter";
-import { t_ri0, Resolution } from "@utkusarioglu/resolver";
+import { t_ri0, Resolution, t_ri1 } from "@utkusarioglu/resolver";
 
 /*
  *	LOCALS
@@ -21,7 +21,7 @@ import { M_Controller } from "../Mixins/m_controller"
  *	DATATYPES
  */
 import { t_namespace } from "@utkusarioglu/namespace";
-import { i_talk, i_Response, i_Request } from "../Common/t_controller";
+import { i_talk, i_response, i_request } from "../Common/t_controller";
 import { Controller } from "../Controller/controller";
 import { C_BootState } from "../Common/c_controller";
 
@@ -96,13 +96,13 @@ export abstract class BaseTestClass extends M_Controller {
     public talk(message: any): void {
         this.get_Controller().announce(
             this.channel,
-            [...C_BootState.ClassReady, [message]] as t_ri0,
+            [...C_BootState.ClassReady, [message]] as t_ri1<typeof message>,
             undefined,
             100
         );
     }
 
-    public request(channel:t_namespace, message: string): Promise<i_Response<string>> {
+    public request(channel:t_namespace, message: string): Promise<i_response<string>> {
         return this.get_Controller().request(
             channel,
             ["RI", "request()", [message]]
@@ -110,7 +110,7 @@ export abstract class BaseTestClass extends M_Controller {
     }
 
     public respond(addition: string): void {
-        this.get_Controller().respond((transmission: i_Request) => {
+        this.get_Controller().respond((transmission: i_request) => {
             const message = Resolution.extract_Argument(transmission.Talk);
             return Promise.resolve(message + addition);
         })

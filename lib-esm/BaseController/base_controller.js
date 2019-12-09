@@ -106,8 +106,8 @@ export class BaseController extends SeparatorHandler {
             this.archive_Announcement(sender_namespace, announcement_channel, announcement_packet);
         };
         if (delay) {
-            if (delay === true) {
-                delay = C_Controller.GraceTime;
+            if (delay == true) {
+                delay = parseInt(C_Controller.GraceTime);
             }
             setTimeout(do_announcement, delay);
         }
@@ -134,15 +134,17 @@ export class BaseController extends SeparatorHandler {
         this._monologue_emitter.on(channel, callback);
     }
     wait(waiter_namespace, recipient_namespace, listen, test_callback = () => true, action_callback = (transmission) => transmission, scope, total_count = 1, current_count = total_count) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve2) => {
             const once_callback_function = (transmission) => {
                 if (test_callback(transmission)) {
                     current_count--;
-                    resolve(action_callback(transmission));
+                    resolve2(action_callback(transmission));
+                    return action_callback(transmission);
                 }
                 else {
                     const new_promise = this.wait(waiter_namespace, recipient_namespace, listen, test_callback, action_callback, scope, total_count, current_count);
-                    resolve(new_promise);
+                    resolve2(new_promise);
+                    return new_promise;
                 }
             };
             if (current_count > 0) {
@@ -150,15 +152,13 @@ export class BaseController extends SeparatorHandler {
                 const channel = recipient_namespace +
                     this.get_Separator("Monologue") +
                     expression_trail;
-                return this._monologue_emitter.once(channel, once_callback_function);
+                this._monologue_emitter.once(channel, once_callback_function);
             }
-        })
-            .catch((error_content) => {
-            console.error("BaseController.wait.Promise.catch:\n", error_content);
         });
     }
     wait_Some(scope, waiter_namespace, wait_set) {
-        return Promise.all(wait_set.map((wait_event) => {
+        return Promise.all(wait_set
+            .map((wait_event) => {
             return this.wait(waiter_namespace, wait_event.Namespace, wait_event.Listen, wait_event.Test, wait_event.Call, scope);
         }));
     }

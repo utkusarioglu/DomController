@@ -19,8 +19,8 @@ import { ActiveEmitter } from "../TestSupport/sample_controller_class"
 /*
  *	DATATYPES
  */
-import { e_Scope, t_transmission, t_waitSet, e_ServiceGroup } from "../Common/t_controller";
-import { t_resolutionInstruction } from "@utkusarioglu/resolver";
+import { e_Scope, t_transmission, i_waitSet, e_ServiceGroup, i_talk } from "../Common/t_controller";
+import { t_resolutionInstruction, t_ri1 } from "@utkusarioglu/resolver";
 
 
 
@@ -71,9 +71,9 @@ test("BaseController.subscribe&announce.Global", () => {
     const base_controller = new BaseController(e_Scope.Global, ActiveEmitter);
 
     const subscription = new Promise((resolve, reject) => {
-        base_controller.subscribe(
+        base_controller.subscribe<any>(
             C_BootState.ClassReady,
-            (transmission: t_transmission) => {
+            (transmission) => {
                 resolve(transmission.Talk);
             },
             namespace,
@@ -100,9 +100,9 @@ test("BaseController.subscribe&announce.Local", () => {
     const base_controller = new BaseController(e_Scope.Local, ActiveEmitter);
 
     const subscription = new Promise((resolve, reject) => {
-        base_controller.subscribe(
+        base_controller.subscribe<unknown>(
             C_BootState.ClassReady,
-            (transmission: t_transmission) => {
+            (transmission) => {
                 resolve(transmission.Talk);
             },
             namespace,
@@ -131,16 +131,16 @@ test("BaseController.wait", () => {
     let announcement_count: number = 0;
 
     const wait_promise = new Promise((resolve) => {
-        base_controller.wait(
+        base_controller.wait<typeof test_value, void>(
             "waiting/for/emit",
             declaration_namespace,
             C_BootState.ClassReady,
-            (transmission: t_transmission) => {
+            (transmission) => {
                 announcement_count++;
-                return (transmission.Talk as t_resolutionInstruction)[2][0]
+                return (transmission.Talk)[2][0]
                     === test_value;
             },
-            (transmission: t_transmission) => {
+            (transmission) => {
                 resolve(announcement_count);
             },
             e_Scope.Local,
@@ -150,14 +150,14 @@ test("BaseController.wait", () => {
     base_controller.announce(
         "base/controller/2",
         declaration_namespace,
-        [...C_BootState.ClassReady, ["not-test-value"] ] as t_resolutionInstruction,
+        [...C_BootState.ClassReady, ["not-test-value"] ] as t_ri1<typeof test_value>,
         e_Scope.Local,
     );
 
     base_controller.announce(
         "base/controller/3",
         declaration_namespace,
-        [...C_BootState.ClassReady, ["not-test-value"] ] as t_resolutionInstruction,
+        [...C_BootState.ClassReady, ["not-test-value"] ] as t_ri1<typeof test_value>,
         e_Scope.Local,
     );
 
@@ -165,7 +165,7 @@ test("BaseController.wait", () => {
     base_controller.announce(
         "base/controller/2",
         declaration_namespace,
-        [...C_BootState.ClassReady, [test_value]] as t_resolutionInstruction,
+        [...C_BootState.ClassReady, [test_value]] as t_ri1<typeof test_value>,
         e_Scope.Local,
     );
 
@@ -186,53 +186,54 @@ test("BaseController.wait_Some", () => {
     let announcement_count: number = 0;
 
 
-    const wait_some = base_controller.wait_Some(
+    const wait_some = base_controller.wait_Some<string, i_talk<string>>(
         e_Scope.Global,
         "waiter/namespace",
         [
             {
                 Namespace: declaration_namespace1,
                 Listen: C_BootState.ClassReady,
-                Test: (transmission: t_transmission) => {
+                Test: (transmission) => {
                     announcement_count++;
-                    return (transmission.Talk as t_resolutionInstruction)[2][0]
+                    return (transmission.Talk)[2][0]
                         === test_value1;
                 },
             },
             {
                 Namespace: declaration_namespace2,
                 Listen: C_BootState.ClassReady,
-                Test: (transmission: t_transmission) => {
+                Test: (transmission) => {
                     announcement_count++;
-                    return (transmission.Talk as t_resolutionInstruction)[2][0]
+                    return (transmission.Talk)[2][0]
                         === test_value2;
                 },
             },
-        ] as t_waitSet[],
-    ).then((transmissions: t_transmission[]) => {
-        return transmissions.map((transmission) => {
-            return (transmission.Talk as t_resolutionInstruction)[2][0];
+        ],
+    ).then((transmissions) => {
+        return (transmissions).map((transmission) => {
+
+            return (transmission.Talk)[2][0];
         });
     });
 
     base_controller.announce(
         "1",
         declaration_namespace1,
-        [...C_BootState.ClassReady, [test_value1]] as t_resolutionInstruction,
+        [...C_BootState.ClassReady, [test_value1]] as t_ri1<typeof test_value1>,
         e_Scope.Global,
     );
 
     base_controller.announce(
         "2",
         declaration_namespace2,
-        [...C_BootState.ClassReady, ["not-test-value"]] as t_resolutionInstruction,
+        [...C_BootState.ClassReady, ["not-test-value"]] as t_ri1<string>,
         e_Scope.Global,
     );
 
     base_controller.announce(
         "2",
         declaration_namespace2,
-        [...C_BootState.ClassReady, [test_value2]] as t_resolutionInstruction,
+        [...C_BootState.ClassReady, [test_value2]] as t_ri1<typeof test_value2>,
         e_Scope.Global,
     );
 

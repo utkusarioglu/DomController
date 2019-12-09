@@ -1,6 +1,6 @@
+import { t_ri0, t_ri1, t_ri } from "@utkusarioglu/resolver";
 import { SeparatorHandler } from "../Common/separator_handler";
-import { t_waitSet, t_transmission, e_ServiceGroup, e_Scope, t_singleScope, t_epoch, i_talk, i_Request } from "../Common/t_controller";
-import { t_resolutionInstruction, t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
+import { i_waitSet, e_ServiceGroup, e_Scope, t_singleScope, t_epoch, i_talk, i_request, i_response, i_dialogueArchiveItem, i_announcementArchiveItem, t_waitActionCallback, t_waitTestCallback, t_wait } from "../Common/t_controller";
 import { t_namespace } from "@utkusarioglu/namespace";
 export declare class BaseController extends SeparatorHandler {
     private _event_emitter;
@@ -10,16 +10,16 @@ export declare class BaseController extends SeparatorHandler {
     private _dialogue_archive;
     private _controller_scope;
     constructor(controller_scope: t_singleScope, event_emitter: any);
-    request(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_resolutionInstruction, scope: e_Scope, group: e_ServiceGroup): Promise<any>;
-    respond(responder_namespace: t_namespace, response_callback: (transmission: i_Request) => Promise<any>, scope: e_Scope, group: e_ServiceGroup): void;
+    request<Content>(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_ri0, scope: e_Scope, group: e_ServiceGroup): Promise<i_response<Content>>;
+    respond<Content>(responder_namespace: t_namespace, response_callback: (transmission: i_request) => Promise<Content>, scope: e_Scope, group: e_ServiceGroup): void;
     private archive_Dialogue;
     private static create_RandomServiceId;
-    get_DialogueArchive(): object[];
-    publicget_ServedChannels(): any;
-    announce(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_resolutionInstruction, scope: t_singleScope, delay?: boolean | t_epoch): void;
-    get_AnnouncementArchive(): object[];
+    get_DialogueArchive(): Array<i_dialogueArchiveItem>;
+    publicget_ServedChannels(): any[];
+    announce<TalkArgs>(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_ri1<TalkArgs> | t_ri, scope: t_singleScope, delay?: boolean | t_epoch): void;
+    get_AnnouncementArchive(): Array<i_announcementArchiveItem>;
     private archive_Announcement;
-    subscribe(listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void, subcribed_namespace: t_namespace, scope: t_singleScope): void;
-    wait(waiter_namespace: t_namespace, recipient_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, test_callback: ((transmission: t_transmission) => boolean) | undefined, action_callback: ((transmission: t_transmission) => any) | undefined, scope: t_singleScope, total_count?: number, current_count?: number): Promise<any>;
-    wait_Some(scope: t_singleScope, waiter_namespace: t_namespace, wait_set: t_waitSet[]): Promise<t_transmission[]>;
+    subscribe<TalkArgs>(listen: t_ri, callback: (transmission: i_talk<TalkArgs>) => void, subcribed_namespace: t_namespace, scope: t_singleScope): void;
+    wait<TalkArgs, Return>(waiter_namespace: t_namespace, recipient_namespace: t_namespace, listen: t_ri, test_callback: t_waitTestCallback<TalkArgs> | undefined, action_callback: t_waitActionCallback<TalkArgs, Return> | undefined, scope: t_singleScope, total_count?: number, current_count?: number): Promise<t_wait<TalkArgs, Return>>;
+    wait_Some<TalkArgs, Return>(scope: t_singleScope, waiter_namespace: t_namespace, wait_set: Array<i_waitSet<TalkArgs, Return>>): Promise<Array<t_wait<TalkArgs, Return>>>;
 }

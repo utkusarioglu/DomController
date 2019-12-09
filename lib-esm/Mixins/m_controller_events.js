@@ -156,10 +156,7 @@ export class M_ControllerEvents {
         this.get_Controller().announce(C_Controller.AllServices, resolution_instruction, e_Scope.Global, delay);
     }
     announce_LibraryAdded(library_source_namespace) {
-        this.get_Controller().announce(C_Controller.AllServices, [
-            ...C_BootState.LibraryAdded,
-            [library_source_namespace],
-        ], e_Scope.Global, true);
+        this.get_Controller().announce(C_Controller.AllServices, [...C_BootState.LibraryAdded, [library_source_namespace]], e_Scope.Global, true);
     }
 }
 //# sourceMappingURL=m_controller_events.js.map

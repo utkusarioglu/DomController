@@ -20,7 +20,7 @@ import { C_StartupTalk } from "../Common/c_controller";
  *	DATATYPES
  */
 import { t_transmission, e_Scope, i_talk } from "../Common/t_controller";
-import { t_resolutionInstruction, Resolution, t_ri0 } from "@utkusarioglu/resolver";
+import { t_resolutionInstruction, Resolution, t_ri0, t_ri1 } from "@utkusarioglu/resolver";
 
 
 
@@ -61,7 +61,7 @@ test("Single Controller.listen&talk.Global", () => {
 
     c.announce(
         subscribed_namespace,
-        [...C_StartupTalk.send_Archive, [data]] as t_ri0,
+        [...C_StartupTalk.send_Archive, [data]] as t_ri1<typeof data>,
     );
 
     return expect(listen).resolves.toBe(data);
@@ -91,7 +91,7 @@ test("Controller.listen&talk.Global", () => {
 
     announcer.announce(
         subscribed_namespace,
-        [...C_StartupTalk.send_Archive, [data]] as t_ri0,
+        [...C_StartupTalk.send_Archive, [data]] as t_ri1<typeof data>,
     );
 
     return expect(listen).resolves.toBe(data);
@@ -109,8 +109,8 @@ test("Controller.service.global", () => {
     const service_controller = new Controller(service_namespace);
     const response_data = "response_data";
 
-    service_controller.respond(
-        (transmission: t_transmission) => {
+    service_controller.respond<string>(
+        (transmission) => {
             return Promise.resolve(response_data);
         },
         //false,

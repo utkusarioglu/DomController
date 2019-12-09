@@ -44,7 +44,7 @@ test("BaseController.wait", () => {
     const wait_promise = new Promise((resolve) => {
         base_controller.wait("waiting/for/emit", declaration_namespace, C_BootState.ClassReady, (transmission) => {
             announcement_count++;
-            return transmission.Talk[2][0]
+            return (transmission.Talk)[2][0]
                 === test_value;
         }, (transmission) => {
             resolve(announcement_count);
@@ -68,7 +68,7 @@ test("BaseController.wait_Some", () => {
             Listen: C_BootState.ClassReady,
             Test: (transmission) => {
                 announcement_count++;
-                return transmission.Talk[2][0]
+                return (transmission.Talk)[2][0]
                     === test_value1;
             },
         },
@@ -77,13 +77,13 @@ test("BaseController.wait_Some", () => {
             Listen: C_BootState.ClassReady,
             Test: (transmission) => {
                 announcement_count++;
-                return transmission.Talk[2][0]
+                return (transmission.Talk)[2][0]
                     === test_value2;
             },
         },
     ]).then((transmissions) => {
-        return transmissions.map((transmission) => {
-            return transmission.Talk[2][0];
+        return (transmissions).map((transmission) => {
+            return (transmission.Talk)[2][0];
         });
     });
     base_controller.announce("1", declaration_namespace1, [...C_BootState.ClassReady, [test_value1]], e_Scope.Global);

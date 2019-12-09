@@ -56,14 +56,14 @@ export class Controller extends SeparatorHandler {
             .get_Scopes(scope)[0]
             .request(this._controller_global_namespace, recipient_namespace, talk, scope, group);
     }
-    respond(response_func, is_static = true, scope = e_Scope.Global, group = e_ServiceGroup.Standard) {
+    respond(response_callback, is_static = true, scope = e_Scope.Global, group = e_ServiceGroup.Standard) {
         if (is_static) {
             Controller._static_responders.push(this._controller_global_namespace +
                 this.get_Separator("Dialogue") +
                 group);
         }
         this.get_Scopes(scope).forEach((active_scope) => {
-            active_scope.respond(this._controller_global_namespace, response_func, scope, group);
+            active_scope.respond(this._controller_global_namespace, response_callback, scope, group);
         });
         return this;
     }
@@ -118,7 +118,7 @@ export class Controller extends SeparatorHandler {
         });
         return this;
     }
-    wait(recipient_namespace, listen, test_callback = () => true, action_callback = () => { }, scope = e_Scope.Global, count = 1, current_count = count) {
+    wait(recipient_namespace, listen, test_callback = () => true, action_callback = (transmission) => transmission, scope = e_Scope.Global, count = 1, current_count = count) {
         const wait_response = this.get_Scopes(scope)[0].wait(this._controller_global_namespace, recipient_namespace, listen, test_callback, action_callback, scope, count, current_count);
         return wait_response;
     }

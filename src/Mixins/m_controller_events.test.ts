@@ -32,7 +32,7 @@ import {
  *	DATATYPES
  */
 import { t_namespace } from "@utkusarioglu/namespace";
-import { t_sequenceStep, e_Scope, t_transmission } from "../Common/t_controller";
+import { i_sequenceStep, e_Scope, t_transmission } from "../Common/t_controller";
 import { ActiveEmitter } from "../TestSupport/sample_controller_class";
 import { Resolution } from "@utkusarioglu/resolver";
 
@@ -60,7 +60,7 @@ test("App.Controller events participants", () => {
     const subscription = new Promise((resolve) => {
         listenting_controller.subscribe(
             C_BootState.ClassReady,
-            (transmission: t_transmission) => {
+            (transmission) => {
                 resolve(transmission.Talk)
             },
             C_Controller.AllServices,
@@ -91,7 +91,7 @@ test("App.Class Ready manual", () => {
     const subscription = new Promise((resolve) => {
         listenting_controller.subscribe(
             C_BootState.ClassReady,
-            (transmission: t_transmission) => {
+            (transmission) => {
                 resolve(transmission.Talk)
             },
             C_Controller.AllServices,
@@ -118,9 +118,9 @@ test("App.Class Ready, late announce", () => {
     const talking_controller = new Controller("Class");
 
     const subscription = new Promise((resolve) => {
-        listenting_controller.subscribe(
+        listenting_controller.subscribe<any>(
             C_BootState.ClassReady,
-            (transmission: t_transmission) => {
+            (transmission) => {
                 resolve(transmission.Talk)
             },
             C_Controller.AllServices,

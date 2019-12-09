@@ -19,13 +19,13 @@ export {
 export {
     e_Scope,
     t_transmission,
-    t_subscription,
-    t_sequenceStep,
-    t_dependency_group,
-    t_service,
-    t_reception,
+    i_subscription,
+    i_sequenceStep,
+    i_dependency_group,
+    i_service,
+    i_reception,
     t_channel,
-    t_waitSet,
+    i_waitSet,
     i_talk,
-    i_Response
+    i_response
 } from "./Common/t_controller";

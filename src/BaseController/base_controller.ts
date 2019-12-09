@@ -3,7 +3,7 @@
  *	COMMON CLASSES
  */ 
 //import { EventEmitter } from "@utkusarioglu/event-emitter";
-import { Resolution, t_ri0 } from "@utkusarioglu/resolver";
+import { Resolution, t_ri0, t_ri1, t_ri } from "@utkusarioglu/resolver";
 import { SeparatorHandler } from "../Common/separator_handler";
 /*
  *	CONSTANTS
@@ -15,7 +15,7 @@ import { C_Controller } from "../Common/c_controller";
  */
 import {
     t_serviceId,
-    t_waitSet,
+    i_waitSet,
     t_transmission,
     e_ServiceGroup,
     e_Scope,
@@ -23,14 +23,24 @@ import {
     t_channel,
     t_epoch,
     i_talk,
-    i_Request,
+    i_request,
+    i_EventEmitter,
+    i_response,
+    i_dialogueArchiveItem,
+    i_announcement,
+    i_announcementArchiveItem,
+    i_announcementPacket,
+    t_waitActionCallback,
+    t_waitTestCallback,
+    t_waitPromiseResponse,
+    t_wait,
 } from "../Common/t_controller";
 import {
     t_resolutionInstruction,
-    t_resolutionInstructionNoArgs,
     t_expressionTrail,
 } from "@utkusarioglu/resolver";
 import { t_namespace } from "@utkusarioglu/namespace";
+import { EventEmitter } from "@utkusarioglu/event-emitter";
 
 
 
@@ -47,7 +57,7 @@ export class BaseController extends SeparatorHandler {
 /*
  * ======================================================= Boundary 1 =========
  *
- *	DECLARATION
+ *	INSTANTIATION
  *
  * ============================================================================
  */
@@ -55,27 +65,27 @@ export class BaseController extends SeparatorHandler {
     /**
      * Stores the event emitter class for the basecontroller to instasntiate
      */
-    private _event_emitter!: any;
+    private _event_emitter!: i_EventEmitter;
 
     /**
      *  Event emitter for talk and listen use cases
      */
-    private _monologue_emitter!: any; // this increase may have some speed cost
+    private _monologue_emitter!: i_EventEmitter; // this increase may have some speed cost
 
     /**
      *  Event emitter for services
      */
-    private _dialogue_emitter!: any; // this increase may have some speed cost;
+    private _dialogue_emitter!: i_EventEmitter; // this increase may have some speed cost;
 
     /**
      *  Stores runtime announcements
      */
-    private _announcement_archive: object[] = [];
+    private _announcement_archive: Array<i_announcementArchiveItem> = [];
 
     /**
      *  Stores runtime requests and responds
      */
-    private _dialogue_archive: object[] = [];
+    private _dialogue_archive: Array<i_dialogueArchiveItem> = [];
 
     /**
      * Scope that the basecontroller is currently working on
@@ -154,13 +164,13 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public request(
+    public request<Content>(
         sender_namespace: t_namespace,
         recipient_namespace: t_namespace,
-        talk: t_resolutionInstruction,
+        talk: t_ri0,
         scope: e_Scope,
         group: e_ServiceGroup,
-    ): Promise<any> {
+    ): Promise<i_response<Content>> {
 
         const service_id: t_serviceId = BaseController.create_RandomServiceId();
         const request_channel: t_channel = recipient_namespace +
@@ -169,7 +179,7 @@ export class BaseController extends SeparatorHandler {
         const response_channel: t_channel = request_channel +
             this.get_Separator("Id") +
             service_id;
-        const request_packet: t_transmission = {
+        const request_packet: i_request = {
             Channel: response_channel,
             Sender: sender_namespace,
             Group: group,
@@ -184,7 +194,7 @@ export class BaseController extends SeparatorHandler {
         return new Promise((resolve, reject) => {
 
             this._dialogue_emitter
-                .once((response_channel), (response_packet: t_transmission) => {
+                .once((response_channel), (response_packet: i_response<Content>) => {
 
                 response_packet.sniff("Error",
                     resolve.bind(null, response_packet),
@@ -196,7 +206,7 @@ export class BaseController extends SeparatorHandler {
 
             this._dialogue_emitter.emit(
                 request_channel,
-                request_packet as t_transmission,
+                request_packet as i_request,
             );
         });
     }
@@ -231,9 +241,9 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public respond(
+    public respond<Content>(
         responder_namespace: t_namespace,
-        response_callback: (transmission: i_Request) => Promise<any>,
+        response_callback: (transmission: i_request) => Promise<Content>,
         scope: e_Scope,
         group: e_ServiceGroup,
     ): void {
@@ -244,12 +254,12 @@ export class BaseController extends SeparatorHandler {
             group;
 
         this._dialogue_emitter.on(listen_channel,
-            (transmission: i_Request) => {
+            (transmission: i_request) => {
 
                 response_callback(transmission)
                     .then((requested_return_content: any) => { 
 
-                        const serve_packet: t_transmission = {
+                        const serve_packet: i_response<Content> = {
                             Sender: transmission.Recipient,
                             Recipient: transmission.Sender,
                             Talk: transmission.Talk,
@@ -270,6 +280,7 @@ export class BaseController extends SeparatorHandler {
 
                     }) // then
                     .catch((error) => {
+                        // TODO
                         console.log("serve error:", error);
                     });
 
@@ -292,8 +303,8 @@ export class BaseController extends SeparatorHandler {
      * Service: Controller
      */
     private archive_Dialogue(
-        request_packet: t_transmission,
-        response_packet: t_transmission,
+        request_packet: i_request,
+        response_packet: i_response<any>,
     ): void {
 
         this._dialogue_archive.push({
@@ -326,7 +337,7 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public get_DialogueArchive() {
+    public get_DialogueArchive(): Array<i_dialogueArchiveItem> {
         return this._dialogue_archive;
     }
     
@@ -338,7 +349,7 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public publicget_ServedChannels() {
+    public publicget_ServedChannels(): any[] {
         return this._dialogue_emitter.eventNames();
     }
 
@@ -375,22 +386,23 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public announce(
+    public announce<TalkArgs>(
         sender_namespace: t_namespace,
         recipient_namespace: t_namespace,
-        talk: t_resolutionInstruction,
+        talk: t_ri1<TalkArgs> | t_ri,
         scope: t_singleScope,
         delay: boolean | t_epoch = false,
     ): void {
 
         const expression_trail: t_expressionTrail =
-            Resolution.extract_ExpressionTrail(talk);
+            // TODO: type t_ri0 needs to be changed after resolver types are updated
+            Resolution.extract_ExpressionTrail(talk as t_ri0);
 
-        const announcement_channel: string = recipient_namespace +
+        const announcement_channel: t_channel = recipient_namespace +
             this.get_Separator("Monologue") +
             expression_trail;
 
-        const announcement_packet: t_transmission = {
+        const announcement_packet: i_announcementPacket<TalkArgs> = {
             Channel: announcement_channel,
             Sender: sender_namespace,
             Recipient: recipient_namespace,
@@ -416,11 +428,11 @@ export class BaseController extends SeparatorHandler {
 
         if (delay) {
 
-            if (delay === true) {
-                delay = C_Controller.GraceTime as unknown as t_epoch;
+            if (delay == true) {
+                delay = parseInt(C_Controller.GraceTime);
             }
 
-            setTimeout(do_announcement, delay as t_epoch);
+            setTimeout(do_announcement, delay);
 
         } else {
             do_announcement();
@@ -440,7 +452,7 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public get_AnnouncementArchive(): object[] {
+    public get_AnnouncementArchive(): Array<i_announcementArchiveItem> {
         return this._announcement_archive;
     }
 
@@ -490,10 +502,9 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public subscribe(
-        listen: t_resolutionInstructionNoArgs,
-        // TODO: t_talk may use a more specific type than t_talk<any> maybe what subscribe and announce transmits needs to be re-evaluated to make the methods more diverse
-        callback: (transmission: i_talk<any>) => void,
+    public subscribe<TalkArgs>(
+        listen: t_ri,
+        callback: (transmission: i_talk<TalkArgs>) => void,
         subcribed_namespace: t_namespace,
         scope: t_singleScope,
     ): void {
@@ -507,7 +518,7 @@ export class BaseController extends SeparatorHandler {
 
         this._monologue_emitter.on(
             channel,
-            callback as (transmission: t_transmission) => void,
+            callback as (transmission: i_talk<TalkArgs>) => void,
         );
     }
 
@@ -534,28 +545,33 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public wait(
+    public wait<TalkArgs, Return>(
         waiter_namespace: t_namespace,
         recipient_namespace: t_namespace,
-        listen: t_resolutionInstructionNoArgs,
-        test_callback: (transmission: t_transmission) => boolean = () => true ,
-        action_callback: (transmission: t_transmission) => any =
+        listen: t_ri,
+        test_callback: t_waitTestCallback<TalkArgs> = () => true ,
+        action_callback: t_waitActionCallback<TalkArgs, Return> =
             (transmission) => transmission,
         scope: t_singleScope,
         total_count: number = 1,
         current_count: number = total_count,
-    ): Promise<any> {
+    ): Promise<t_wait<TalkArgs, Return>> {
+        // TODO
+        // @ts-ignore
+        return new Promise((
+            resolve2: t_waitPromiseResponse<TalkArgs, Return>,
+        ) => {
+            const once_callback_function =
+                (transmission: i_talk<TalkArgs>) => {
 
-        return new Promise((resolve, reject) => {
+                    if (test_callback(transmission)) {
 
-            const once_callback_function = (transmission: t_transmission) => {
+                        current_count--;
+                        resolve2(action_callback(transmission));
+                        return action_callback(transmission);
+                    } else {
 
-                if (test_callback(transmission)) {
-                    current_count--;
-                    resolve(action_callback(transmission));
-                } else {
-
-                    const new_promise = this.wait(
+                        const new_promise = this.wait<TalkArgs, Return>(
                             waiter_namespace,
                             recipient_namespace,
                             listen,
@@ -566,32 +582,25 @@ export class BaseController extends SeparatorHandler {
                             current_count,
                         );
 
-                    resolve(new_promise);
-                }
-            }; 
+                        resolve2(new_promise);
+                        return new_promise;
+                    }
+                };
 
             if (current_count > 0) {
 
                 const expression_trail: t_expressionTrail =
-                    Resolution.extract_ExpressionTrail(
-                        listen,
-                    );
+                    Resolution.extract_ExpressionTrail(listen);
 
                 const channel: t_channel = recipient_namespace +
                     this.get_Separator("Monologue") +
                     expression_trail;
 
-                return this._monologue_emitter.once(
+                this._monologue_emitter.once(
                     channel,
                     once_callback_function,
                 );
             }
-
-        }) // return new promise
-            .catch((error_content: any) => {
-                console.error(
-                    "BaseController.wait.Promise.catch:\n", error_content,
-                );
         });
     }
 
@@ -605,20 +614,21 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public wait_Some(
+    public wait_Some<TalkArgs, Return>(
         scope: t_singleScope,
         waiter_namespace: t_namespace,
-        wait_set: t_waitSet[],
-    ): Promise<t_transmission[]> {
-        return Promise.all(wait_set.map((wait_event: t_waitSet) => {
-            return this.wait(
-                waiter_namespace,
-                wait_event.Namespace,
-                wait_event.Listen,
-                wait_event.Test,
-                wait_event.Call,
-                scope,
-            );
+        wait_set: Array<i_waitSet<TalkArgs, Return>>,
+    ): Promise<Array<t_wait<TalkArgs, Return>>> {
+        return Promise.all(wait_set
+            .map((wait_event: i_waitSet<TalkArgs, Return>) => {
+                return this.wait(
+                    waiter_namespace,
+                    wait_event.Namespace,
+                    wait_event.Listen,
+                    wait_event.Test,
+                    wait_event.Call,
+                    scope,
+                );
         }));
     }
 }

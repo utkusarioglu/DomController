@@ -22,7 +22,7 @@ import { BaseTestClass } from "./base_test_class";
  *	DATATYPES
  */
 import { t_namespace } from "@utkusarioglu/namespace";
-import { i_talk, i_Response, i_Request } from "../Common/t_controller";
+import { i_talk, i_response, i_request, i_EventEmitter } from "../Common/t_controller";
 import { Controller } from "../Controller/controller";
 
 

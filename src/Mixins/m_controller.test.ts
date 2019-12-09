@@ -22,7 +22,7 @@ import { SampleControllerClass, ActiveEmitter } from "../TestSupport/sample_cont
 /*
  *	DATATYPES
  */
-import { i_talk, i_Request, i_Response } from "../Common/t_controller";
+import { i_talk, i_request, i_response } from "../Common/t_controller";
 
 
 /* ////////////////////////////////////////////////////////////////////////////
@@ -153,7 +153,7 @@ test("Controller - service from separate classes", () => {
 
     responder_instance.respond(addition);
     const result = requester_instance.request(responder_namespace, message)
-        .then((transmission: i_Response<string>) => {
+        .then((transmission: i_response<string>) => {
             return transmission.Content;
         });
 
