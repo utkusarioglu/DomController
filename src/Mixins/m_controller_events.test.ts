@@ -47,10 +47,6 @@ import { Resolution } from "@utkusarioglu/resolver";
  *
  * ///////////////////////////////////////////////////////////////////////// */
 
-// TODO: this shouldn't be needed
-Controller.set_EventEmitter(ActiveEmitter);
-
-
 test("skip", () => {
     expect(2).toStrictEqual(2)
 })

@@ -2,9 +2,7 @@ import { Controller } from "../Controller/controller";
 import { SampleControllerEventsClass } from "../TestSupport/sample_controller_events_class";
 import { C_BootState, C_Controller } from "../Common/c_controller";
 import { e_Scope } from "../Common/t_controller";
-import { ActiveEmitter } from "../TestSupport/sample_controller_class";
 import { Resolution } from "@utkusarioglu/resolver";
-Controller.set_EventEmitter(ActiveEmitter);
 test("skip", () => {
     expect(2).toStrictEqual(2);
 });

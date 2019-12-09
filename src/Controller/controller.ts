@@ -130,10 +130,7 @@ export class Controller extends SeparatorHandler {
     constructor(namespace: t_namespace) {
         super();
         this.set_GlobalNamespace(namespace);
-        Controller._global_controller = new BaseController(
-            e_Scope.Global,
-            this.get_EventEmitter()
-        );
+        this.set_GlobalController();
     }
 
     /**
@@ -149,6 +146,19 @@ export class Controller extends SeparatorHandler {
             this.get_EventEmitter()
         );
         Controller.flush_GlobalNamespaces();
+    }
+
+    /**
+     * Sets global controller if it hasn't been set
+     */
+    private set_GlobalController(): this {
+        if (Controller._global_controller === undefined) {
+            Controller._global_controller = new BaseController(
+                e_Scope.Global,
+                this.get_EventEmitter()
+            );
+        }
+        return this;
     }
 
 
@@ -185,15 +195,13 @@ export class Controller extends SeparatorHandler {
     }
 
 /*
- * ======================================================= Boundary 1 =========
+ * ======================================================= Boundary 2 =========
  *
  *	DIALOGUE
  *	
  *	Request and Respond functions together form the "service" feature.
  *	{@link A_Controller} class introduces include_Services method for 
  *	registering responses
- *
- * ============================================================================
  */
 
 /* --------------------------------------------------------- Use Case ---------
@@ -482,14 +490,12 @@ export class Controller extends SeparatorHandler {
 
 
 /*
- * ======================================================= Boundary 1 =========
+ * ======================================================= Boundary 2 =========
  *
  *	MONOLOGUE
  *	
  *	These methods emit or listen to a certain channel but they do not expect 
  *	the other side to take any kind of action.
- *
- * ============================================================================
  */
 
 /* --------------------------------------------------------- Use Case ---------
@@ -516,16 +522,16 @@ export class Controller extends SeparatorHandler {
         scope: t_scope = e_Scope.Global,
         delay: boolean | t_epoch = false,
     ): this {
-
-        this.get_Scopes(scope).forEach((active_scope: BaseController) => {
-            active_scope.announce(
-                this._controller_global_namespace,
-                recipient_namespace,
-                talk,
-                scope as t_singleScope,
-                delay,
-            );
-        });
+        this.get_Scopes(scope)
+            .forEach((active_scope: BaseController) => {
+                active_scope.announce(
+                    this._controller_global_namespace,
+                    recipient_namespace,
+                    talk,
+                    scope as t_singleScope,
+                    delay,
+                );
+            });
 
         return this;
     }
@@ -668,13 +674,11 @@ export class Controller extends SeparatorHandler {
 
 
 /*
- * ======================================================= Boundary 1 =========
+ * ======================================================= Boundary 2 =========
  *
  *	HANDLE
  *	
  *	Getters, Setters, Checkers and Manipulators
- *
- * ============================================================================
  */
 
 /* --------------------------------------------------------- Use Case ---------

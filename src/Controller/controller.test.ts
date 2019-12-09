@@ -33,7 +33,7 @@ import { t_resolutionInstruction, Resolution, t_ri0 } from "@utkusarioglu/resolv
  *
  * ///////////////////////////////////////////////////////////////////////// */
 
-// TODO: this shouldn't be needed
+// this would need to be declared only once in production, not in every module
 Controller.set_EventEmitter(ActiveEmitter);
 
 

@@ -7,11 +7,17 @@ export class Controller extends SeparatorHandler {
     constructor(namespace) {
         super();
         this.set_GlobalNamespace(namespace);
-        Controller._global_controller = new BaseController(e_Scope.Global, this.get_EventEmitter());
+        this.set_GlobalController();
     }
     static flush_GlobalController() {
         Controller._global_controller = new BaseController(e_Scope.Global, this.get_EventEmitter());
         Controller.flush_GlobalNamespaces();
+    }
+    set_GlobalController() {
+        if (Controller._global_controller === undefined) {
+            Controller._global_controller = new BaseController(e_Scope.Global, this.get_EventEmitter());
+        }
+        return this;
     }
     static set_EventEmitter(event_emitter) {
         Controller._event_emitter_class = event_emitter;
@@ -94,7 +100,8 @@ export class Controller extends SeparatorHandler {
         Controller._forced_dynamic_service = true;
     }
     announce(recipient_namespace, talk, scope = e_Scope.Global, delay = false) {
-        this.get_Scopes(scope).forEach((active_scope) => {
+        this.get_Scopes(scope)
+            .forEach((active_scope) => {
             active_scope.announce(this._controller_global_namespace, recipient_namespace, talk, scope, delay);
         });
         return this;

@@ -15,6 +15,7 @@ export declare class Controller extends SeparatorHandler {
     private static _forced_dynamic_service;
     constructor(namespace: t_namespace);
     static flush_GlobalController(): void;
+    private set_GlobalController;
     static set_EventEmitter(event_emitter: Object): void;
     static get_EventEmitter(): Object;
     get_EventEmitter(): any;
