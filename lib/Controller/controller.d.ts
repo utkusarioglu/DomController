@@ -1,4 +1,3 @@
-import { t_ri0 } from "@utkusarioglu/resolver";
 import { SeparatorHandler } from "../Common/separator_handler";
 import { t_ri } from "@utkusarioglu/resolver";
 import { t_scope, t_singleScope, i_waitSet, e_ServiceGroup, i_staticContentArchive, i_localControllerStack, t_epoch, i_talk, i_request, i_response, i_EventEmitter, t_waitActionCallback, t_waitTestCallback, t_wait } from "../Common/t_controller";
@@ -29,7 +28,7 @@ export declare class Controller extends SeparatorHandler {
     static get_AllStaticContent(): i_staticContentArchive;
     static flush_StaticContentArchive(): void;
     static force_AllDynamicService(): void;
-    announce<TalkArgs = any>(recipient_namespace: t_namespace, talk: t_ri<[TalkArgs]> | t_ri0, scope?: t_scope, delay?: boolean | t_epoch): this;
+    announce<TalkRi extends t_ri_any>(recipient_namespace: t_namespace, talk: TalkRi, scope?: t_scope, delay?: boolean | t_epoch): this;
     private static is_StaticResponder;
     get_AnnouncementArchive(scope: t_singleScope): object[];
     subscribe<TalkArgs = any>(listen: t_ri, callback: (transmission: i_talk<TalkArgs>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;

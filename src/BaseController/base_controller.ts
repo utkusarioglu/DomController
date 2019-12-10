@@ -386,23 +386,23 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public announce<TalkArgs>(
+    public announce<TalkRi extends t_ri_any>(
         sender_namespace: t_namespace,
         recipient_namespace: t_namespace,
-        talk: t_ri<[TalkArgs]> | t_ri0,
+        talk: TalkRi,
         scope: t_singleScope,
         delay: boolean | t_epoch = false,
     ): void {
 
         const expression_trail: t_expressionTrail =
             // TODO: type t_ri0 needs to be changed after resolver types are updated
-            Resolution.extract_ExpressionTrail(talk as t_ri0);
+            Resolution.extract_ExpressionTrail(talk);
 
         const announcement_channel: t_channel = recipient_namespace +
             this.get_Separator("Monologue") +
             expression_trail;
 
-        const announcement_packet: i_announcementPacket<TalkArgs> = {
+        const announcement_packet: i_announcementPacket<TalkRi> = {
             Channel: announcement_channel,
             Sender: sender_namespace,
             Recipient: recipient_namespace,

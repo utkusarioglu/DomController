@@ -1,5 +1,5 @@
 import { BaseController } from "../BaseController/base_controller";
-import { t_ri0, t_ri } from "@utkusarioglu/resolver";
+import { t_ri } from "@utkusarioglu/resolver";
 import { t_namespace } from "@utkusarioglu/namespace";
 import { t_ri_any } from "@utkusarioglu/resolver/Common/t_resolver";
 export declare type t_epoch = number;
@@ -98,11 +98,11 @@ export interface i_request extends i_transmission {
     Id: t_serviceId;
     Static: boolean;
 }
-export interface i_announcementPacket<TalkArgs> {
+export interface i_announcementPacket<TalkRi> {
     Channel: t_channel;
     Sender: t_namespace;
     Recipient: t_namespace;
-    Talk: t_ri<[TalkArgs]> | t_ri0;
+    Talk: TalkRi;
     Time: t_epoch;
     Static: boolean;
     Scope: e_Scope;

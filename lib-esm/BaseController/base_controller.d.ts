@@ -1,4 +1,3 @@
-import { t_ri0 } from "@utkusarioglu/resolver";
 import { SeparatorHandler } from "../Common/separator_handler";
 import { i_waitSet, e_ServiceGroup, e_Scope, t_singleScope, t_epoch, i_talk, i_request, i_response, i_dialogueArchiveItem, i_announcementArchiveItem, t_waitActionCallback, t_waitTestCallback, t_wait } from "../Common/t_controller";
 import { t_ri } from "@utkusarioglu/resolver";
@@ -18,7 +17,7 @@ export declare class BaseController extends SeparatorHandler {
     private static create_RandomServiceId;
     get_DialogueArchive(): Array<i_dialogueArchiveItem>;
     publicget_ServedChannels(): any[];
-    announce<TalkArgs>(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_ri<[TalkArgs]> | t_ri0, scope: t_singleScope, delay?: boolean | t_epoch): void;
+    announce<TalkRi extends t_ri_any>(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: TalkRi, scope: t_singleScope, delay?: boolean | t_epoch): void;
     get_AnnouncementArchive(): Array<i_announcementArchiveItem>;
     private archive_Announcement;
     subscribe<TalkArgs>(listen: t_ri, callback: (transmission: i_talk<TalkArgs>) => void, subcribed_namespace: t_namespace, scope: t_singleScope): void;

@@ -519,9 +519,9 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public announce<TalkArgs = any>(
+    public announce<TalkRi extends t_ri_any>(
         recipient_namespace: t_namespace,
-        talk: t_ri<[TalkArgs]> | t_ri0,
+        talk: TalkRi,
         scope: t_scope = e_Scope.Global,
         delay: boolean | t_epoch = false,
     ): this {

@@ -306,11 +306,11 @@ export interface i_request extends i_transmission {
 
 
 
-export interface i_announcementPacket<TalkArgs> {
+export interface i_announcementPacket<TalkRi> {
     Channel: t_channel,
     Sender: t_namespace,
     Recipient: t_namespace,
-    Talk: t_ri<[TalkArgs]> | t_ri0,
+    Talk: TalkRi,
     Time: t_epoch,
     Static: boolean,
     Scope: e_Scope,

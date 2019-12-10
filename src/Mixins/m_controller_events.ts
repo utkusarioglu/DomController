@@ -578,7 +578,7 @@ export abstract class M_ControllerEvents {
     protected announce_LibraryAdded(
         library_source_namespace: t_namespace,
     ): void {
-        this.get_Controller().announce<t_namespace>(
+        this.get_Controller().announce(
             C_Controller.AllServices,
             [...C_BootState.LibraryAdded, [library_source_namespace]] as t_ri<[t_namespace]>,
             e_Scope.Global,
