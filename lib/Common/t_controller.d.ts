@@ -81,8 +81,8 @@ interface i_transmission {
     Time: t_epoch;
     Scope: e_Scope;
 }
-export interface i_talk<TalkArgs> extends i_transmission {
-    Talk: t_ri<[TalkArgs]>;
+export interface i_talk<TalkRi> extends i_transmission {
+    Talk: TalkRi;
 }
 export interface i_response<Content> extends i_transmission {
     Group: e_ServiceGroup;

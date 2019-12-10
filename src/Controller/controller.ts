@@ -588,9 +588,9 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public subscribe<TalkArgs = any>(
+    public subscribe<TalkRi = any>(
         listen: t_ri,
-        callback: (transmission: i_talk<TalkArgs>) => void,
+        callback: (transmission: i_talk<TalkRi>) => void,
         subcribed_namespace: t_namespace = this.get_GlobalNamespace(),
         scope: t_scope = e_Scope.Global,
     ): this {

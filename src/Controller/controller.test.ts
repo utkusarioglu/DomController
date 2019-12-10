@@ -49,7 +49,7 @@ test("Single Controller.listen&talk.Global", () => {
     const data = "data";
 
     const listen = new Promise((resolve) => {
-        c.subscribe<typeof data>(
+        c.subscribe<t_ri<[typeof data]>>(
             C_StartupTalk.send_Archive,
             (transmission) => {
                 resolve((Resolution.extract_Argument(transmission.Talk)));

@@ -31,7 +31,7 @@ export declare class Controller extends SeparatorHandler {
     announce<TalkRi extends t_ri_any>(recipient_namespace: t_namespace, talk: TalkRi, scope?: t_scope, delay?: boolean | t_epoch): this;
     private static is_StaticResponder;
     get_AnnouncementArchive(scope: t_singleScope): object[];
-    subscribe<TalkArgs = any>(listen: t_ri, callback: (transmission: i_talk<TalkArgs>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;
+    subscribe<TalkRi = any>(listen: t_ri, callback: (transmission: i_talk<TalkRi>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;
     wait<TalkArgs = any, Return = i_talk<TalkArgs>>(recipient_namespace: t_namespace, listen: t_ri, test_callback?: t_waitTestCallback<TalkArgs>, action_callback?: t_waitActionCallback<TalkArgs, Return>, scope?: t_singleScope, count?: number, current_count?: number): Promise<t_wait<TalkArgs, Return>>;
     wait_Some<TalkArgs = any, Return = i_talk<TalkArgs>>(wait_set: Array<i_waitSet<TalkArgs, Return>>, scope: t_singleScope): Promise<Array<t_wait<TalkArgs, Return>>>;
     set_LocalNamespace(local_namespace: t_namespace): this;

@@ -265,9 +265,9 @@ interface i_transmission {
 /**
  * Sub set of t_transmission for talk event
  */
-export interface i_talk<TalkArgs> extends i_transmission {
+export interface i_talk<TalkRi> extends i_transmission {
     /** Talking that is involved with the transmission*/
-    Talk: t_ri<[TalkArgs]>;
+    Talk: TalkRi;
 }
 
 /**
