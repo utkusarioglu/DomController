@@ -19,7 +19,7 @@ import { C_StartupTalk } from "../Common/c_controller";
 /*
  *	DATATYPES
  */
-import { t_transmission, e_Scope, i_talk } from "../Common/t_controller";
+import { e_Scope, i_talk, i_request, i_response } from "../Common/t_controller";
 import { t_resolutionInstruction, Resolution, t_ri0, t_ri1 } from "@utkusarioglu/resolver";
 
 
@@ -117,12 +117,12 @@ test("Controller.service.global", () => {
         //e_Scope.Global,
     );
 
-    const response = consuming_controller.request(
+    const response = consuming_controller.request<string>(
         service_namespace,
         ["RI", "do_Something"],
         //e_Scope.Global,
     ).
-        then((transmission: t_transmission) => {
+        then((transmission: i_response<string>) => {
             return transmission.Content;
         });
 

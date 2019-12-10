@@ -36,7 +36,6 @@ import {
     i_announcement,
     e_Scope,
     e_ServiceGroup,
-    t_transmission,
     t_singleScope,
     i_sequenceStep,
 } from "../Common/t_controller";

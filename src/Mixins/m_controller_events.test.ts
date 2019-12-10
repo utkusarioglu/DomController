@@ -32,7 +32,7 @@ import {
  *	DATATYPES
  */
 import { t_namespace } from "@utkusarioglu/namespace";
-import { i_sequenceStep, e_Scope, t_transmission } from "../Common/t_controller";
+import { i_sequenceStep, e_Scope } from "../Common/t_controller";
 import { ActiveEmitter } from "../TestSupport/sample_controller_class";
 import { Resolution } from "@utkusarioglu/resolver";
 

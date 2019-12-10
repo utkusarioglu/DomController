@@ -102,7 +102,7 @@ test("Basecontroller.service", () => {
     }, e_Scope.Global, e_ServiceGroup.Standard);
     const response = base_controller.request(sender_namespace, responder_namespace, ["RI", "set_Banana"], e_Scope.Global, e_ServiceGroup.Standard)
         .then((transmission) => {
-        return transmission.Content.Time;
+        return (transmission.Content).Time;
     });
     return expect(response).resolves.toBeGreaterThan(1000);
 });

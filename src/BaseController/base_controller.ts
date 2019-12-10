@@ -16,7 +16,6 @@ import { C_Controller } from "../Common/c_controller";
 import {
     t_serviceId,
     i_waitSet,
-    t_transmission,
     e_ServiceGroup,
     e_Scope,
     t_singleScope,

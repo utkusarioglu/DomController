@@ -20,21 +20,6 @@ export interface i_waitSet<TalkArgs, Return> {
     Call?: t_waitPromiseResponse<TalkArgs, Return>;
 }
 export declare type t_transmissionContent = any;
-export interface t_transmission {
-    Sender: t_namespace;
-    Recipient: t_namespace;
-    Channel: t_channel;
-    Group?: e_ServiceGroup;
-    Listen?: t_ri;
-    Talk?: t_resolutionInstruction;
-    Content?: t_transmissionContent;
-    Error?: i_error;
-    Id?: t_serviceId;
-    Time: t_epoch;
-    Static: boolean;
-    LastDynamicTime?: t_epoch;
-    Scope: e_Scope;
-}
 export interface i_dependency_group<TalkArgs, Return> {
     Scope: t_singleScope;
     Members: i_waitSet<TalkArgs, Return>[];
@@ -87,40 +72,30 @@ export interface i_sequenceStep {
 export interface i_map<T> {
     [key: string]: T;
 }
-export interface i_talk<TalkArgs> {
+interface i_transmission {
     Sender: t_namespace;
     Recipient: t_namespace;
     Channel: t_channel;
-    Talk: t_ri1<TalkArgs>;
     Error?: i_error;
     Time: t_epoch;
-    Static: boolean;
     Scope: e_Scope;
 }
-export interface i_response<Content> {
-    Sender: t_namespace;
-    Recipient: t_namespace;
-    Channel: t_channel;
+export interface i_talk<TalkArgs> extends i_transmission {
+    Talk: t_ri1<TalkArgs>;
+}
+export interface i_response<Content> extends i_transmission {
     Group: e_ServiceGroup;
     Talk: t_ri0;
     Content: Content;
-    Error?: i_error;
     Id: t_serviceId;
-    Time: t_epoch;
     Static: boolean;
     LastDynamicTime?: t_epoch;
-    Scope: e_Scope;
 }
-export interface i_request {
-    Channel: t_channel;
-    Sender: t_namespace;
+export interface i_request extends i_transmission {
     Group: e_ServiceGroup;
-    Recipient: t_namespace;
     Talk: t_ri0;
     Id: t_serviceId;
-    Time: t_epoch;
     Static: boolean;
-    Scope: e_Scope;
 }
 export interface i_announcementPacket<TalkArgs> {
     Channel: t_channel;
@@ -157,3 +132,4 @@ export declare type t_waitActionCallback<TalkArgs, Return = i_talk<TalkArgs>> = 
 export declare type t_waitTestCallback<TalkArgs> = (transmission: i_talk<TalkArgs>) => boolean;
 export declare type t_waitPromiseResponse<TalkArgs, Return> = (reason: t_wait<TalkArgs, Return> | Promise<t_wait<TalkArgs, Return>>) => t_wait<TalkArgs, Return>;
 export declare type t_wait<TalkArgs, Return> = i_talk<TalkArgs> | Return;
+export {};

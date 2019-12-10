@@ -101,42 +101,6 @@ export interface i_waitSet<TalkArgs, Return> {
  */
 export type t_transmissionContent = any;
 
-// TODO: t_transmission event needs to be reduced to its barebones and used as an abstract interface for talk, listen, respond and other more specific events
-/**
- * Contains keys that are expected to be transmitted by controller methods
- */
-export interface t_transmission {
-    /** namespace of the sender*/
-    Sender: t_namespace;
-    /** namespace of the recipient*/
-    Recipient: t_namespace;
-    /** Redundant info for ease of access, concatenating:
-     * 1- recipient namespace  
-     * 2- method or announcement separator (whichever applies)
-     * 3- service group
-     * 4- id separator (if applies)
-     * 5- id (if applies)
-     */
-    Channel: t_channel;
-    /** denotes the service group in service transmissions */
-    Group?: e_ServiceGroup;
-    /** Listening resolution involved with the transmission */
-    Listen?: t_ri;
-    /** Talking that is involved with the transmission*/
-    Talk?: t_resolutionInstruction;
-    /** transmission content that is created by the responder */
-    Content?: t_transmissionContent;
-    /** Error content if an error occured*/
-    Error?: i_error;
-    /** Unique request code*/
-    Id?: t_serviceId;
-    /** epoch when the transmission occured */
-    Time: t_epoch;
-    Static: boolean;
-    LastDynamicTime?: t_epoch;
-    Scope: e_Scope;
-}
-
 
 /**
  * Datatype for instructing multiple waits followed by a call
@@ -260,10 +224,18 @@ export interface i_sequenceStep {
 export interface i_map<T> { [key: string]: T; }
 
 
+
+
+
+
+
+
+
+// TODO: t_transmission event needs to be reduced to its barebones and used as an abstract interface for talk, listen, respond and other more specific events
 /**
- * Sub set of t_transmission for talk event
+ * Contains keys that are expected to be transmitted by controller methods
  */
-export interface i_talk<TalkArgs> {
+interface i_transmission {
     /** namespace of the sender*/
     Sender: t_namespace;
     /** namespace of the recipient*/
@@ -276,25 +248,63 @@ export interface i_talk<TalkArgs> {
      * 5- id (if applies)
      */
     Channel: t_channel;
+    ///** denotes the service group in service transmissions */
+    //Group?: e_ServiceGroup;
+    ///** Listening resolution involved with the transmission */
+    //Listen?: t_ri;
+    /** Talking that is involved with the transmission*/
+    //Talk?: t_resolutionInstruction;
+    /** transmission content that is created by the responder */
+    //Content?: t_transmissionContent;
+    /** Error content if an error occured*/
+    Error?: i_error;
+    /** Unique request code*/
+    //Id?: t_serviceId;
+    /** epoch when the transmission occured */
+    Time: t_epoch;
+    //Static: boolean;
+    //LastDynamicTime?: t_epoch;
+    Scope: e_Scope;
+}
+
+
+
+
+/**
+ * Sub set of t_transmission for talk event
+ */
+export interface i_talk<TalkArgs> extends i_transmission {
+    /** namespace of the sender*/
+    //Sender: t_namespace;
+    /** namespace of the recipient*/
+    //Recipient: t_namespace;
+    /** Redundant info for ease of access, concatenating:
+     * 1- recipient namespace  
+     * 2- method or announcement separator (whichever applies)
+     * 3- service group
+     * 4- id separator (if applies)
+     * 5- id (if applies)
+     */
+    //Channel: t_channel;
     /** Talking that is involved with the transmission*/
     Talk: t_ri1<TalkArgs>;
     /** Error content if an error occured*/
-    Error?: i_error;
+    //Error?: i_error;
     /** epoch when the transmission occured */
-    Time: t_epoch;
-    Static: boolean;
-    Scope: e_Scope;
+    //Time: t_epoch;
+    //Static: boolean;
+    //Scope: e_Scope;
 }
 
 /**
  * Extends t_transmission for response event 
  */
-export interface i_response<Content> {
+export interface i_response<Content> extends i_transmission {
     /** namespace of the sender*/
-    Sender: t_namespace;
+    //Sender: t_namespace;
 
     /** namespace of the recipient*/
-    Recipient: t_namespace;
+    //Recipient: t_namespace;
 
     /** Redundant info for ease of access, concatenating:
      * 1- recipient namespace  
@@ -303,7 +313,7 @@ export interface i_response<Content> {
      * 4- id separator (if applies)
      * 5- id (if applies)
      */
-    Channel: t_channel;
+    //Channel: t_channel;
 
     /** denotes the service group in service transmissions */
     Group: e_ServiceGroup;
@@ -312,27 +322,40 @@ export interface i_response<Content> {
     /** transmission content that is created by the responder */
     Content: Content;
     /** Error content if an error occured*/
-    Error?: i_error;
+    //Error?: i_error;
     /** Unique request code*/
     Id: t_serviceId;
     /** epoch when the transmission occured */
-    Time: t_epoch;
+    //Time: t_epoch;
     Static: boolean;
     LastDynamicTime?: t_epoch;
-    Scope: e_Scope;
+    //Scope: e_Scope;
 }
 
-export interface i_request {
-    Channel: t_channel,
-    Sender: t_namespace,
+export interface i_request extends i_transmission {
+    //Channel: t_channel,
+    //Sender: t_namespace,
     Group: e_ServiceGroup,
-    Recipient: t_namespace,
+    //Recipient: t_namespace,
     Talk: t_ri0,
     Id: t_serviceId,
-    Time: t_epoch,
+    //Time: t_epoch,
     Static: boolean,
-    Scope: e_Scope,
+    //Scope: e_Scope,
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export interface i_announcementPacket<TalkArgs> {
     Channel: t_channel,

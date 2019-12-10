@@ -32,7 +32,6 @@ import {
     t_scope,
     t_singleScope,
     i_waitSet,
-    t_transmission,
     e_ServiceGroup,
     i_staticContentArchive,
     e_Scope,
@@ -417,10 +416,10 @@ export class Controller extends SeparatorHandler {
     private static set_PromisifiedStaticContent(
         channel: t_channel,
         instruction_code: t_instructionCode,
-        static_content: Promise<t_transmission>,
+        static_content: Promise<i_response<any>>,
     ): void {
         static_content
-            .then((transmission: t_transmission) => {
+            .then((transmission: i_response<any>) => {
 
                 Controller._static_content_archive.pave(
                     [

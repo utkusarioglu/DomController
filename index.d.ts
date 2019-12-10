@@ -10,7 +10,7 @@ declare module '@utkusarioglu/dom-controller' {
     export { M_Controller } from "@utkusarioglu/dom-controller/Mixins/m_controller";
     export { M_ControllerEvents } from "@utkusarioglu/dom-controller/Mixins/m_controller_events";
     export { C_Controller, C_StartupTalk, C_BootState, } from "@utkusarioglu/dom-controller/Common/c_controller";
-    export { e_Scope, t_transmission, i_subscription, i_sequenceStep, i_dependency_group, i_service, i_reception, t_channel, i_waitSet, i_talk, i_response } from "@utkusarioglu/dom-controller/Common/t_controller";
+    export { e_Scope, i_subscription, i_sequenceStep, i_dependency_group, i_service, i_reception, t_channel, i_waitSet, i_talk, i_response } from "@utkusarioglu/dom-controller/Common/t_controller";
 }
 
 declare module '@utkusarioglu/dom-controller/Controller/controller' {
@@ -112,21 +112,6 @@ declare module '@utkusarioglu/dom-controller/Common/t_controller' {
         Call?: t_waitPromiseResponse<TalkArgs, Return>;
     }
     export type t_transmissionContent = any;
-    export interface t_transmission {
-        Sender: t_namespace;
-        Recipient: t_namespace;
-        Channel: t_channel;
-        Group?: e_ServiceGroup;
-        Listen?: t_ri;
-        Talk?: t_resolutionInstruction;
-        Content?: t_transmissionContent;
-        Error?: i_error;
-        Id?: t_serviceId;
-        Time: t_epoch;
-        Static: boolean;
-        LastDynamicTime?: t_epoch;
-        Scope: e_Scope;
-    }
     export interface i_dependency_group<TalkArgs, Return> {
         Scope: t_singleScope;
         Members: i_waitSet<TalkArgs, Return>[];
@@ -179,40 +164,30 @@ declare module '@utkusarioglu/dom-controller/Common/t_controller' {
     export interface i_map<T> {
         [key: string]: T;
     }
-    export interface i_talk<TalkArgs> {
+    interface i_transmission {
         Sender: t_namespace;
         Recipient: t_namespace;
         Channel: t_channel;
-        Talk: t_ri1<TalkArgs>;
         Error?: i_error;
         Time: t_epoch;
-        Static: boolean;
         Scope: e_Scope;
     }
-    export interface i_response<Content> {
-        Sender: t_namespace;
-        Recipient: t_namespace;
-        Channel: t_channel;
+    export interface i_talk<TalkArgs> extends i_transmission {
+        Talk: t_ri1<TalkArgs>;
+    }
+    export interface i_response<Content> extends i_transmission {
         Group: e_ServiceGroup;
         Talk: t_ri0;
         Content: Content;
-        Error?: i_error;
         Id: t_serviceId;
-        Time: t_epoch;
         Static: boolean;
         LastDynamicTime?: t_epoch;
-        Scope: e_Scope;
     }
-    export interface i_request {
-        Channel: t_channel;
-        Sender: t_namespace;
+    export interface i_request extends i_transmission {
         Group: e_ServiceGroup;
-        Recipient: t_namespace;
         Talk: t_ri0;
         Id: t_serviceId;
-        Time: t_epoch;
         Static: boolean;
-        Scope: e_Scope;
     }
     export interface i_announcementPacket<TalkArgs> {
         Channel: t_channel;
@@ -249,6 +224,7 @@ declare module '@utkusarioglu/dom-controller/Common/t_controller' {
     export type t_waitTestCallback<TalkArgs> = (transmission: i_talk<TalkArgs>) => boolean;
     export type t_waitPromiseResponse<TalkArgs, Return> = (reason: t_wait<TalkArgs, Return> | Promise<t_wait<TalkArgs, Return>>) => t_wait<TalkArgs, Return>;
     export type t_wait<TalkArgs, Return> = i_talk<TalkArgs> | Return;
+    export {};
 }
 
 declare module '@utkusarioglu/dom-controller/Common/separator_handler' {

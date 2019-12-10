@@ -19,7 +19,7 @@ import { ActiveEmitter } from "../TestSupport/sample_controller_class"
 /*
  *	DATATYPES
  */
-import { e_Scope, t_transmission, i_waitSet, e_ServiceGroup, i_talk } from "../Common/t_controller";
+import { e_Scope, i_waitSet, e_ServiceGroup, i_talk, i_request } from "../Common/t_controller";
 import { t_resolutionInstruction, t_ri1 } from "@utkusarioglu/resolver";
 
 
@@ -250,9 +250,9 @@ test("Basecontroller.service", () => {
     const responder_namespace = "responder/namespace";
     const sender_namespace = "sender/namespace";
 
-    base_controller.respond(
+    base_controller.respond<i_request>(
         responder_namespace,
-        (transmission: t_transmission) => {
+        (transmission: i_request) => {
             return new Promise((resolve) => {
                 resolve(transmission);
             });
@@ -261,15 +261,15 @@ test("Basecontroller.service", () => {
         e_ServiceGroup.Standard,
     );
 
-    const response = base_controller.request(
+    const response = base_controller.request<i_request>(
         sender_namespace,
         responder_namespace,
         ["RI", "set_Banana"],
         e_Scope.Global,
         e_ServiceGroup.Standard,
     )
-        .then((transmission: t_transmission) => {
-            return (transmission.Content as t_transmission).Time;
+        .then((transmission) => {
+            return (transmission.Content).Time;
         });
 
     return expect(response).resolves.toBeGreaterThan(1000);
