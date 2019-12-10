@@ -1,6 +1,6 @@
 {
   "name": "@utkusarioglu/dom-controller",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "description": "",
   "main": "index.js",
   "author": {
@@ -18,23 +18,23 @@
   "devDependencies": {
     "@types/jest": "24.0.21",
     "@types/node": "^8.0.14",
+    "@utkusarioglu/event-emitter": "git+https://github.com/utkusarioglu/EventEmitter.git",
     "dts-bundle": "0.7.3",
     "jest": "24.9.0",
     "shx": "^0.3.2",
     "ts-jest": "24.1.0",
     "ts-loader": "6.2.1",
-    "typescript": "^3.6.4",
+    "tsdoc": "^0.0.4",
+    "typescript": "^3.7.3",
     "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10",
-    "tsdoc": "^0.0.4"
+    "webpack-cli": "^3.3.10"
   },
   "dependencies": {
-    "@utkusarioglu/event-emitter": "git+https://github.com/utkusarioglu/EventEmitter.git",
     "@utkusarioglu/namespace": "git+https://github.com/utkusarioglu/namespace.git",
     "@utkusarioglu/object-assist": "git+https://github.com/utkusarioglu/ObjectAssist.git",
     "@utkusarioglu/resolver": "git+https://github.com/utkusarioglu/Resolver.git",
     "@utkusarioglu/state": "git+https://github.com/utkusarioglu/state.git",
-    "@utkusarioglu/string-assist": "https://github.com/utkusarioglu/StringAssist.git"
+    "@utkusarioglu/string-assist": "git+https://github.com/utkusarioglu/StringAssist.git"
   },
   "repository": {
     "type": "git",
