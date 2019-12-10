@@ -20,7 +20,7 @@ import { C_StartupTalk } from "../Common/c_controller";
  *	DATATYPES
  */
 import { e_Scope, i_talk, i_request, i_response } from "../Common/t_controller";
-import { t_resolutionInstruction, Resolution, t_ri0, t_ri1 } from "@utkusarioglu/resolver";
+import { t_ri, Resolution, t_ri0 } from "@utkusarioglu/resolver";
 
 
 
@@ -49,9 +49,9 @@ test("Single Controller.listen&talk.Global", () => {
     const data = "data";
 
     const listen = new Promise((resolve) => {
-        c.subscribe(
+        c.subscribe<typeof data>(
             C_StartupTalk.send_Archive,
-            (transmission: i_talk<t_ri0>) => {
+            (transmission) => {
                 resolve((Resolution.extract_Argument(transmission.Talk)));
             },
             subscribed_namespace,
@@ -61,7 +61,7 @@ test("Single Controller.listen&talk.Global", () => {
 
     c.announce(
         subscribed_namespace,
-        [...C_StartupTalk.send_Archive, [data]] as t_ri1<typeof data>,
+        [...C_StartupTalk.send_Archive, [data]] as t_ri<[typeof data]>,
     );
 
     return expect(listen).resolves.toBe(data);
@@ -91,7 +91,7 @@ test("Controller.listen&talk.Global", () => {
 
     announcer.announce(
         subscribed_namespace,
-        [...C_StartupTalk.send_Archive, [data]] as t_ri1<typeof data>,
+        [...C_StartupTalk.send_Archive, [data]] as t_ri<[typeof data]>,
     );
 
     return expect(listen).resolves.toBe(data);

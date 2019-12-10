@@ -2,6 +2,7 @@
 // Dependencies for this module:
 //   ../@utkusarioglu/resolver
 //   ../@utkusarioglu/namespace
+//   ../@utkusarioglu/resolver/Common/t_resolver
 //   ../@utkusarioglu/state
 //   ../@utkusarioglu/state/t_state
 
@@ -14,24 +15,26 @@ declare module '@utkusarioglu/dom-controller' {
 }
 
 declare module '@utkusarioglu/dom-controller/Controller/controller' {
-    import { t_ri0, t_ri1, t_ri } from "@utkusarioglu/resolver";
+    import { t_ri0 } from "@utkusarioglu/resolver";
     import { SeparatorHandler } from "@utkusarioglu/dom-controller/Common/separator_handler";
+    import { t_ri } from "@utkusarioglu/resolver";
     import { t_scope, t_singleScope, i_waitSet, e_ServiceGroup, i_staticContentArchive, i_localControllerStack, t_epoch, i_talk, i_request, i_response, i_EventEmitter, t_waitActionCallback, t_waitTestCallback, t_wait } from "@utkusarioglu/dom-controller/Common/t_controller";
     import { t_namespace } from "@utkusarioglu/namespace";
+    import { t_ri_any } from "@utkusarioglu/resolver/Common/t_resolver";
     export class Controller extends SeparatorHandler {
         constructor(namespace: t_namespace);
         static flush_GlobalController(): void;
         static set_EventEmitter(event_emitter: any): void;
         static get_EventEmitter(): i_EventEmitter;
         get_EventEmitter(): i_EventEmitter;
-        request<Content = any>(responding_namespace: t_namespace, talk: t_ri0, scope?: t_singleScope, group?: e_ServiceGroup): Promise<i_response<Content>>;
+        request<Content = any>(responding_namespace: t_namespace, talk: t_ri_any, scope?: t_singleScope, group?: e_ServiceGroup): Promise<i_response<Content>>;
         respond<Content = any>(response_callback: (transmission: i_request) => Promise<Content>, is_static?: boolean, scope?: t_scope, group?: e_ServiceGroup): this;
         get_DialogueArchive(scope: t_singleScope): object;
         static get_AllStaticChannels(): t_namespace[];
         static get_AllStaticContent(): i_staticContentArchive;
         static flush_StaticContentArchive(): void;
         static force_AllDynamicService(): void;
-        announce<TalkArgs = any>(recipient_namespace: t_namespace, talk: t_ri1<TalkArgs> | t_ri, scope?: t_scope, delay?: boolean | t_epoch): this;
+        announce<TalkArgs = any>(recipient_namespace: t_namespace, talk: t_ri<[TalkArgs]> | t_ri0, scope?: t_scope, delay?: boolean | t_epoch): this;
         get_AnnouncementArchive(scope: t_singleScope): object[];
         subscribe<TalkArgs = any>(listen: t_ri, callback: (transmission: i_talk<TalkArgs>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;
         wait<TalkArgs = any, Return = i_talk<TalkArgs>>(recipient_namespace: t_namespace, listen: t_ri, test_callback?: t_waitTestCallback<TalkArgs>, action_callback?: t_waitActionCallback<TalkArgs, Return>, scope?: t_singleScope, count?: number, current_count?: number): Promise<t_wait<TalkArgs, Return>>;
@@ -91,8 +94,9 @@ declare module '@utkusarioglu/dom-controller/Common/c_controller' {
 
 declare module '@utkusarioglu/dom-controller/Common/t_controller' {
     import { BaseController } from "@utkusarioglu/dom-controller/BaseController/base_controller";
-    import { t_resolutionInstruction, t_ri1, t_ri0, t_ri } from "@utkusarioglu/resolver";
+    import { t_ri0, t_ri } from "@utkusarioglu/resolver";
     import { t_namespace } from "@utkusarioglu/namespace";
+    import { t_ri_any } from "@utkusarioglu/resolver/Common/t_resolver";
     export type t_epoch = number;
     export enum e_Scope {
         Local = 1,
@@ -134,7 +138,7 @@ declare module '@utkusarioglu/dom-controller/Common/t_controller' {
     export interface i_reception {
         Scope: t_scope;
         Namespace?: t_namespace;
-        Talk: t_resolutionInstruction;
+        Talk: t_ri;
         Listen: t_ri;
         Call: (value: any) => any;
     }
@@ -173,11 +177,11 @@ declare module '@utkusarioglu/dom-controller/Common/t_controller' {
         Scope: e_Scope;
     }
     export interface i_talk<TalkArgs> extends i_transmission {
-        Talk: t_ri1<TalkArgs>;
+        Talk: t_ri<[TalkArgs]>;
     }
     export interface i_response<Content> extends i_transmission {
         Group: e_ServiceGroup;
-        Talk: t_ri0;
+        Talk: t_ri_any;
         Content: Content;
         Id: t_serviceId;
         Static: boolean;
@@ -185,7 +189,7 @@ declare module '@utkusarioglu/dom-controller/Common/t_controller' {
     }
     export interface i_request extends i_transmission {
         Group: e_ServiceGroup;
-        Talk: t_ri0;
+        Talk: t_ri_any;
         Id: t_serviceId;
         Static: boolean;
     }
@@ -193,7 +197,7 @@ declare module '@utkusarioglu/dom-controller/Common/t_controller' {
         Channel: t_channel;
         Sender: t_namespace;
         Recipient: t_namespace;
-        Talk: t_ri1<TalkArgs> | t_ri0;
+        Talk: t_ri<[TalkArgs]> | t_ri0;
         Time: t_epoch;
         Static: boolean;
         Scope: e_Scope;
@@ -239,17 +243,19 @@ declare module '@utkusarioglu/dom-controller/Common/separator_handler' {
 }
 
 declare module '@utkusarioglu/dom-controller/BaseController/base_controller' {
-    import { t_ri0, t_ri1, t_ri } from "@utkusarioglu/resolver";
+    import { t_ri0 } from "@utkusarioglu/resolver";
     import { SeparatorHandler } from "@utkusarioglu/dom-controller/Common/separator_handler";
     import { i_waitSet, e_ServiceGroup, e_Scope, t_singleScope, t_epoch, i_talk, i_request, i_response, i_dialogueArchiveItem, i_announcementArchiveItem, t_waitActionCallback, t_waitTestCallback, t_wait } from "@utkusarioglu/dom-controller/Common/t_controller";
+    import { t_ri } from "@utkusarioglu/resolver";
     import { t_namespace } from "@utkusarioglu/namespace";
+    import { t_ri_any } from "@utkusarioglu/resolver/Common/t_resolver";
     export class BaseController extends SeparatorHandler {
         constructor(controller_scope: t_singleScope, event_emitter: any);
-        request<Content>(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_ri0, scope: e_Scope, group: e_ServiceGroup): Promise<i_response<Content>>;
+        request<Content>(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_ri_any, scope: e_Scope, group: e_ServiceGroup): Promise<i_response<Content>>;
         respond<Content>(responder_namespace: t_namespace, response_callback: (transmission: i_request) => Promise<Content>, scope: e_Scope, group: e_ServiceGroup): void;
         get_DialogueArchive(): Array<i_dialogueArchiveItem>;
         publicget_ServedChannels(): any[];
-        announce<TalkArgs>(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_ri1<TalkArgs> | t_ri, scope: t_singleScope, delay?: boolean | t_epoch): void;
+        announce<TalkArgs>(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_ri<[TalkArgs]> | t_ri0, scope: t_singleScope, delay?: boolean | t_epoch): void;
         get_AnnouncementArchive(): Array<i_announcementArchiveItem>;
         subscribe<TalkArgs>(listen: t_ri, callback: (transmission: i_talk<TalkArgs>) => void, subcribed_namespace: t_namespace, scope: t_singleScope): void;
         wait<TalkArgs, Return>(waiter_namespace: t_namespace, recipient_namespace: t_namespace, listen: t_ri, test_callback: t_waitTestCallback<TalkArgs> | undefined, action_callback: t_waitActionCallback<TalkArgs, Return> | undefined, scope: t_singleScope, total_count?: number, current_count?: number): Promise<t_wait<TalkArgs, Return>>;

@@ -3,7 +3,7 @@
  *	COMMON CLASSES
  */ 
 //import { EventEmitter } from "@utkusarioglu/event-emitter";
-import { Resolution, t_ri0, t_ri1, t_ri } from "@utkusarioglu/resolver";
+import { Resolution, t_ri0 } from "@utkusarioglu/resolver";
 import { SeparatorHandler } from "../Common/separator_handler";
 /*
  *	CONSTANTS
@@ -35,11 +35,12 @@ import {
     t_wait,
 } from "../Common/t_controller";
 import {
-    t_resolutionInstruction,
+    t_ri,
     t_expressionTrail,
 } from "@utkusarioglu/resolver";
 import { t_namespace } from "@utkusarioglu/namespace";
 import { EventEmitter } from "@utkusarioglu/event-emitter";
+import { t_ri_any } from "@utkusarioglu/resolver/Common/t_resolver";
 
 
 
@@ -166,7 +167,7 @@ export class BaseController extends SeparatorHandler {
     public request<Content>(
         sender_namespace: t_namespace,
         recipient_namespace: t_namespace,
-        talk: t_ri0,
+        talk: t_ri_any,
         scope: e_Scope,
         group: e_ServiceGroup,
     ): Promise<i_response<Content>> {
@@ -388,7 +389,7 @@ export class BaseController extends SeparatorHandler {
     public announce<TalkArgs>(
         sender_namespace: t_namespace,
         recipient_namespace: t_namespace,
-        talk: t_ri1<TalkArgs> | t_ri,
+        talk: t_ri<[TalkArgs]> | t_ri0,
         scope: t_singleScope,
         delay: boolean | t_epoch = false,
     ): void {

@@ -1,6 +1,7 @@
 import { BaseController } from "../BaseController/base_controller";
-import { t_resolutionInstruction, t_ri1, t_ri0, t_ri } from "@utkusarioglu/resolver";
+import { t_ri0, t_ri } from "@utkusarioglu/resolver";
 import { t_namespace } from "@utkusarioglu/namespace";
+import { t_ri_any } from "@utkusarioglu/resolver/Common/t_resolver";
 export declare type t_epoch = number;
 export declare enum e_Scope {
     Local = 1,
@@ -42,7 +43,7 @@ export interface i_service {
 export interface i_reception {
     Scope: t_scope;
     Namespace?: t_namespace;
-    Talk: t_resolutionInstruction;
+    Talk: t_ri;
     Listen: t_ri;
     Call: (value: any) => any;
 }
@@ -81,11 +82,11 @@ interface i_transmission {
     Scope: e_Scope;
 }
 export interface i_talk<TalkArgs> extends i_transmission {
-    Talk: t_ri1<TalkArgs>;
+    Talk: t_ri<[TalkArgs]>;
 }
 export interface i_response<Content> extends i_transmission {
     Group: e_ServiceGroup;
-    Talk: t_ri0;
+    Talk: t_ri_any;
     Content: Content;
     Id: t_serviceId;
     Static: boolean;
@@ -93,7 +94,7 @@ export interface i_response<Content> extends i_transmission {
 }
 export interface i_request extends i_transmission {
     Group: e_ServiceGroup;
-    Talk: t_ri0;
+    Talk: t_ri_any;
     Id: t_serviceId;
     Static: boolean;
 }
@@ -101,7 +102,7 @@ export interface i_announcementPacket<TalkArgs> {
     Channel: t_channel;
     Sender: t_namespace;
     Recipient: t_namespace;
-    Talk: t_ri1<TalkArgs> | t_ri0;
+    Talk: t_ri<[TalkArgs]> | t_ri0;
     Time: t_epoch;
     Static: boolean;
     Scope: e_Scope;

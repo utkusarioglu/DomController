@@ -20,7 +20,7 @@ import { ActiveEmitter } from "../TestSupport/sample_controller_class"
  *	DATATYPES
  */
 import { e_Scope, i_waitSet, e_ServiceGroup, i_talk, i_request } from "../Common/t_controller";
-import { t_resolutionInstruction, t_ri1 } from "@utkusarioglu/resolver";
+import { t_ri } from "@utkusarioglu/resolver";
 
 
 
@@ -150,14 +150,14 @@ test("BaseController.wait", () => {
     base_controller.announce(
         "base/controller/2",
         declaration_namespace,
-        [...C_BootState.ClassReady, ["not-test-value"] ] as t_ri1<typeof test_value>,
+        [...C_BootState.ClassReady, ["not-test-value"] ] as t_ri<[typeof test_value]>,
         e_Scope.Local,
     );
 
     base_controller.announce(
         "base/controller/3",
         declaration_namespace,
-        [...C_BootState.ClassReady, ["not-test-value"] ] as t_ri1<typeof test_value>,
+        [...C_BootState.ClassReady, ["not-test-value"] ] as t_ri<[typeof test_value]>,
         e_Scope.Local,
     );
 
@@ -165,7 +165,7 @@ test("BaseController.wait", () => {
     base_controller.announce(
         "base/controller/2",
         declaration_namespace,
-        [...C_BootState.ClassReady, [test_value]] as t_ri1<typeof test_value>,
+        [...C_BootState.ClassReady, [test_value]] as t_ri<[typeof test_value]>,
         e_Scope.Local,
     );
 
@@ -219,21 +219,21 @@ test("BaseController.wait_Some", () => {
     base_controller.announce(
         "1",
         declaration_namespace1,
-        [...C_BootState.ClassReady, [test_value1]] as t_ri1<typeof test_value1>,
+        [...C_BootState.ClassReady, [test_value1]] as t_ri<[typeof test_value1]>,
         e_Scope.Global,
     );
 
     base_controller.announce(
         "2",
         declaration_namespace2,
-        [...C_BootState.ClassReady, ["not-test-value"]] as t_ri1<string>,
+        [...C_BootState.ClassReady, ["not-test-value"]] as t_ri<[string]>,
         e_Scope.Global,
     );
 
     base_controller.announce(
         "2",
         declaration_namespace2,
-        [...C_BootState.ClassReady, [test_value2]] as t_ri1<typeof test_value2>,
+        [...C_BootState.ClassReady, [test_value2]] as t_ri<[typeof test_value2]>,
         e_Scope.Global,
     );
 

@@ -10,8 +10,7 @@ import {
     t_epoch
 } from "./t_controller";
 import {
-    t_resolutionInstruction,
-    t_ri
+    t_ri,
 } from "@utkusarioglu/resolver";
 
 

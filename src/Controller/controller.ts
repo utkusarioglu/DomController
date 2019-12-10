@@ -8,7 +8,7 @@
 /*
  *	DEPENDENCIES
  */
-import { Resolution, t_ri0, t_ri1, t_ri } from "@utkusarioglu/resolver";
+import { Resolution, t_ri0 } from "@utkusarioglu/resolver";
 
 /*
  *	LOCAL CLASSES
@@ -25,7 +25,7 @@ import { C_Controller } from "../Common/c_controller";
  *	DATATYPES
  */
 import {
-    t_resolutionInstruction,
+    t_ri,
     t_instructionCode,
 } from "@utkusarioglu/resolver";
 import {
@@ -48,6 +48,7 @@ import {
 } from "../Common/t_controller";
 import { i_map } from "@utkusarioglu/state/t_state"; // This should be removed
 import { t_namespace } from "@utkusarioglu/namespace";
+import { t_ri_any } from "@utkusarioglu/resolver/Common/t_resolver";
 
 
 
@@ -225,7 +226,7 @@ export class Controller extends SeparatorHandler {
      */
     public request<Content = any>(
         responding_namespace: t_namespace,
-        talk: t_ri0,
+        talk: t_ri_any,
         scope: t_singleScope = e_Scope.Global,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
     ): Promise<i_response<Content>> {
@@ -298,7 +299,7 @@ export class Controller extends SeparatorHandler {
      */
     private request_DynamicTransmission<Content = any>(
         recipient_namespace: t_namespace,
-        talk: t_ri0,
+        talk: t_ri_any,
         scope: t_singleScope = e_Scope.Global,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
     ): Promise<i_response<Content>> {
@@ -520,7 +521,7 @@ export class Controller extends SeparatorHandler {
      */
     public announce<TalkArgs = any>(
         recipient_namespace: t_namespace,
-        talk: t_ri1<TalkArgs> | t_ri,
+        talk: t_ri<[TalkArgs]> | t_ri0,
         scope: t_scope = e_Scope.Global,
         delay: boolean | t_epoch = false,
     ): this {

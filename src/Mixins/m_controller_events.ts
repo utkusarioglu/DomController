@@ -40,10 +40,8 @@ import {
     i_sequenceStep,
 } from "../Common/t_controller";
 import {
-    t_resolutionInstruction,
     t_ri,
     t_ri0,
-    t_ri1,
 } from "@utkusarioglu/resolver";
 import { t_namespace } from "@utkusarioglu/namespace";
 import { t_epoch } from "@utkusarioglu/state/t_state";
@@ -582,7 +580,7 @@ export abstract class M_ControllerEvents {
     ): void {
         this.get_Controller().announce<t_namespace>(
             C_Controller.AllServices,
-            [...C_BootState.LibraryAdded, [library_source_namespace]] as t_ri1<t_namespace>,
+            [...C_BootState.LibraryAdded, [library_source_namespace]] as t_ri<[t_namespace]>,
             e_Scope.Global,
             true,
         );

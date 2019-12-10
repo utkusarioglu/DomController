@@ -10,7 +10,7 @@
  */
 import { Parent } from "@utkusarioglu/mixer";    
 import { M_Namespace, t_namespace } from "@utkusarioglu/namespace";
-import { t_ri0, Resolution, t_ri1 } from "@utkusarioglu/resolver";
+import { t_ri0, Resolution } from "@utkusarioglu/resolver";
 
 /*
  *	LOCALS

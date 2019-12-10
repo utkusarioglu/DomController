@@ -10,7 +10,7 @@
  */
 //import { EventEmitter } from "events";
 import { EventEmitter } from "@utkusarioglu/event-emitter";
-import { t_ri0, Resolution, t_ri1 } from "@utkusarioglu/resolver";
+import { t_ri0, Resolution, t_ri } from "@utkusarioglu/resolver";
 
 /*
  *	LOCALS
@@ -96,7 +96,7 @@ export abstract class BaseTestClass extends M_Controller {
     public talk(message: any): void {
         this.get_Controller().announce(
             this.channel,
-            [...C_BootState.ClassReady, [message]] as t_ri1<typeof message>,
+            [...C_BootState.ClassReady, [message]] as t_ri<[typeof message]>,
             undefined,
             100
         );
